@@ -1,0 +1,7 @@
+global.json
+.vs/*
+.vscode/*
+src/sqlcicd/bin/*
+src/sqlcicd/obj/*
+test/sqlcicd.Tests/bin/*
+test/sqlcicd.Tests/obj/*
