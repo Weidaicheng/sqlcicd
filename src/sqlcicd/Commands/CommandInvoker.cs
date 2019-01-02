@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace sqlcicd.Commands
 {
     /// <summary>
@@ -26,9 +28,11 @@ namespace sqlcicd.Commands
         /// <summary>
         /// Execute command
         /// </summary>
-        public void Invoke(string[] args)
+        /// <param name="args">args</param>
+        /// <returns><see cref="ExecutionResult" /></returns>
+        public async Task<ExecutionResult> Invoke(string[] args)
         {
-            _command.Execute(args);
+            return await _command.Execute(args);
         }
     }
 }

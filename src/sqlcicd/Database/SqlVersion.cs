@@ -1,8 +1,9 @@
 using System;
 using sqlcicd.Repository;
+using sqlcicd.Repository.Entity;
 using sqlcicd.Utility;
 
-namespace sqlcicd.Entity
+namespace sqlcicd.Database
 {
     /// <summary>
     /// Sql version entity
@@ -15,9 +16,14 @@ namespace sqlcicd.Entity
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Repository type
+        /// </summary>
+        public RepositoryType RepositoryType { get; set; }
+
+        /// <summary>
         /// Version
         /// </summary>
-        public IRepositoryVersion Version { get; set; }
+        public string Version { get; set; }
 
         /// <summary>
         /// Delivery time

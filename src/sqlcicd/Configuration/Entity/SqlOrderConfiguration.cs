@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace sqlcicd.Configuration
+namespace sqlcicd.Configuration.Entity
 {
     /// <summary>
     /// Sql order configuration
@@ -8,7 +8,7 @@ namespace sqlcicd.Configuration
     public class SqlOrderConfiguration
     {
         /// <summary>
-        /// Orders
+        /// File orders
         /// </summary>
         public IEnumerable<string> FileOrder { get; set; }
     }

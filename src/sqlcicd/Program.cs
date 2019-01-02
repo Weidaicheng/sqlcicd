@@ -1,4 +1,5 @@
 ﻿using System;
+using sqlcicd.Configuration;
 
 namespace sqlcicd
 {
@@ -6,7 +7,8 @@ namespace sqlcicd
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            // args[0] is repository path
+            Singletons.Path = args[0];
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using sqlcicd.Configuration.Entity;
 
 namespace sqlcicd.Configuration
 {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using sqlcicd.Repository.Entity;
 
 namespace sqlcicd.Repository
 {
@@ -12,7 +13,7 @@ namespace sqlcicd.Repository
         /// </summary>
         /// <param name="repoPath">repository path</param>
         /// <returns><see cref="IRepositoryVersion" /></returns>
-        IRepositoryVersion GetNewestCommit(string repoPath);
+        RepositoryVersion GetNewestCommit(string repoPath);
 
         /// <summary>
         /// Get changed files(Added, Modified)
@@ -21,6 +22,6 @@ namespace sqlcicd.Repository
         /// <param name="latestVersion">Latest committed version</param>
         /// <param name="latestSqlVersion">Latest deliveried version</param>
         /// <returns>Changed files' path</returns>
-        IEnumerable<string> GetChangedFiles(string repoPath, IRepositoryVersion latestVersion, IRepositoryVersion latestSqlVersion);
+        IEnumerable<string> GetChangedFiles(string repoPath, RepositoryVersion latestVersion, RepositoryVersion latestSqlVersion);
     }
 }

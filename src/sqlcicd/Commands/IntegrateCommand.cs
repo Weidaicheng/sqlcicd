@@ -1,9 +1,13 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using sqlcicd.Configuration;
-using sqlcicd.DbNegotiator;
+using sqlcicd.Configuration.Entity;
+using sqlcicd.Database;
 using sqlcicd.Exceptions;
 using sqlcicd.Files;
 using sqlcicd.Repository;
+using sqlcicd.Repository.Entity;
 using sqlcicd.Syntax;
 
 namespace sqlcicd.Commands
@@ -17,29 +21,30 @@ namespace sqlcicd.Commands
         private readonly IDbNegotiator _dbNegotiator;
         private readonly ISqlSelector _sqlSelector;
         private readonly IGrammerChecker _grammerChecker;
-        private readonly RepositoryVersionFactory _repositoryVFactory;
         private readonly IFileReader _fileReader;
+        private readonly SqlIgnoreConfiguration _sqlIgnoreConfiguration;
 
         public IntegrateCommand(IRepository repository,
             IDbNegotiator dbNegotiator,
             ISqlSelector sqlSelector,
             IGrammerChecker grammerChecker,
-            RepositoryVersionFactory repositoryVFactory,
-            IFileReader fileReader)
+            IFileReader fileReader,
+            SqlIgnoreConfiguration sqlIgnoreConfiguration)
         {
             _repository = repository;
             _dbNegotiator = dbNegotiator;
             _sqlSelector = sqlSelector;
             _grammerChecker = grammerChecker;
-            _repositoryVFactory = repositoryVFactory;
             _fileReader = fileReader;
+            _sqlIgnoreConfiguration = sqlIgnoreConfiguration;
         }
 
         /// <summary>
         /// Continuous Integrate
         /// </summary>
         /// <param name="args">arguments, the first argument is the repository path</param>
-        public async Task Execute(string[] args)
+        /// <returns><see cref="ExecutionResult" /></returns>
+        public async Task<ExecutionResult> Execute(string[] args)
         {
             var path = args[0];
 
@@ -48,26 +53,33 @@ namespace sqlcicd.Commands
 
             // 2. get latest version from db
             var latestSqlVersion = _dbNegotiator.GetLatestSqlVersion();
-            var latest = _repositoryVFactory.GetRepositoryVersion(latestSqlVersion);
+            var latest = RepositoryVersion.GetRepositoryVersion(latestSqlVersion);
 
             // 3. get changed(added, modified) files from repository
             var changedFiles = _repository.GetChangedFiles(path, newest, latest);
 
             // 4. exclude ignored files
-            _sqlSelector.Exclude(SqlConfigurations.SqlIgnore, ref changedFiles);
+            _sqlSelector.Exclude(_sqlIgnoreConfiguration, ref changedFiles);
 
             var hasErr = false;
-            var error = "";
+            var errors = new List<string>();
             // 5. check grammer
             foreach (var file in changedFiles)
             {
                 var script = await _fileReader.GetContentAsync(file);
-                hasErr = _grammerChecker.Check(script, out string errMsg);
-                error += errMsg;
+                if (_grammerChecker.Check(script, out string errMsg))
+                {
+                    errors.Add(errMsg);
+                    hasErr = true;
+                }
             }
 
-            if (hasErr)
-                throw new SqlSyntaxErrorException(error);
+            return new ExecutionResult()
+            {
+                Success = !hasErr,
+                Result = null,
+                ErrorMessages = errors
+            };
         }
     }
 }

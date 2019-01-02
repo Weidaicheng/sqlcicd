@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using sqlcicd.Entity;
 
-namespace sqlcicd.DbNegotiator
+namespace sqlcicd.Database
 {
     /// <summary>
     /// Talk to db

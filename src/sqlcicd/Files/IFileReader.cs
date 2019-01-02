@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace sqlcicd.Files
@@ -13,5 +14,12 @@ namespace sqlcicd.Files
         /// <param name="path">File path</param>
         /// <returns>File content</returns>
         Task<string> GetContentAsync(string path);
+
+        /// <summary>
+        /// Get file lines
+        /// </summary>
+        /// <param name="path">File path</param>
+        /// <returns>File lines</returns>
+        Task<IEnumerable<string>> GetLinesAsync(string path);
     }
 }

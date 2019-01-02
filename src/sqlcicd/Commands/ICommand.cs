@@ -11,6 +11,7 @@ namespace sqlcicd.Commands
         /// Execute command
         /// </summary>
         /// <param name="args">Arguments</param>
-        Task Execute(string[] args);
+        /// <returns>If execute successful</returns>
+        Task<ExecutionResult> Execute(string[] args);
     }
 }
