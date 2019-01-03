@@ -24,15 +24,9 @@ namespace sqlcicd.Configuration
         Task<SqlOrderConfiguration> GetSqlOrderConfiguration();
 
         /// <summary>
-        /// Get database type configuration
+        /// Get base configuration
         /// </summary>
-        /// <returns><see cref="DbType" /></returns>
-        Task<DbType> GetDbTypeConfiguration();
-
-        /// <summary>
-        /// Get repository type configuration
-        /// </summary>
-        /// <returns><see cref="RepositoryType" /></returns>
-        Task<RepositoryType> GetRepositoryTypeConfiguration();
+        /// <returns><see cref="BaseConfiguration" /></returns>
+        Task<BaseConfiguration> GetBaseConfiguration();
     }
 }

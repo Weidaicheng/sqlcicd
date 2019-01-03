@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using sqlcicd.Files;
 
-namespace Tests
+namespace sqlcicd.Tests
 {
     public class Tests
     {

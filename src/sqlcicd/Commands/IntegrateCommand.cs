@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using sqlcicd.Commands.Entity;
 using sqlcicd.Configuration;
 using sqlcicd.Configuration.Entity;
 using sqlcicd.Database;
@@ -42,17 +44,16 @@ namespace sqlcicd.Commands
         /// <summary>
         /// Continuous Integrate
         /// </summary>
-        /// <param name="args">arguments, the first argument is the repository path</param>
         /// <returns><see cref="ExecutionResult" /></returns>
-        public async Task<ExecutionResult> Execute(string[] args)
+        public async Task<ExecutionResult> Execute()
         {
-            var path = args[0];
+            var path = Singletons.Args[1];
 
             // 1. get newest version from repository
             var newest = _repository.GetNewestCommit(path);
 
             // 2. get latest version from db
-            var latestSqlVersion = _dbNegotiator.GetLatestSqlVersion();
+            var latestSqlVersion = await _dbNegotiator.GetLatestSqlVersion();
             var latest = RepositoryVersion.GetRepositoryVersion(latestSqlVersion);
 
             // 3. get changed(added, modified) files from repository
@@ -74,11 +75,21 @@ namespace sqlcicd.Commands
                 }
             }
 
+            // 6. print errors
+            if (hasErr)
+            {
+                Console.WriteLine("Syntax check result: ");
+                foreach (var e in errors)
+                {
+                    Console.WriteLine($"\t{e}");
+                }
+            }
+
             return new ExecutionResult()
             {
                 Success = !hasErr,
                 Result = null,
-                ErrorMessages = errors
+                ErrorMessage = errors.Aggregate((prev, next) => $"{prev}\n{next}")
             };
         }
     }

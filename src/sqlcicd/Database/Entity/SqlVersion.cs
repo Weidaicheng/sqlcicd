@@ -3,7 +3,7 @@ using sqlcicd.Repository;
 using sqlcicd.Repository.Entity;
 using sqlcicd.Utility;
 
-namespace sqlcicd.Database
+namespace sqlcicd.Database.Entity
 {
     /// <summary>
     /// Sql version entity
@@ -28,7 +28,7 @@ namespace sqlcicd.Database
         /// <summary>
         /// Delivery time
         /// </summary>
-        public DateTime DeliveryTime { get; set; } = TimeUtility.Now;
+        public DateTime DeliveryTime { get; set; }
 
         /// <summary>
         /// Transaction time cost, total seconds
@@ -43,12 +43,12 @@ namespace sqlcicd.Database
         /// <summary>
         /// Is this the latest version
         /// </summary>
-        public bool IsLatest { get; set; } = true;
+        public bool IsLatest { get; set; }
 
         /// <summary>
         /// Has this version been rollbacked
         /// </summary>
-        public bool IsRollbacked { get; set; } = false;
+        public bool IsRollbacked { get; set; }
 
         /// <summary>
         /// Can this version be rollbacked

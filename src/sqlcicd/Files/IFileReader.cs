@@ -21,5 +21,12 @@ namespace sqlcicd.Files
         /// <param name="path">File path</param>
         /// <returns>File lines</returns>
         Task<IEnumerable<string>> GetLinesAsync(string path);
+
+        /// <summary>
+        /// Check if the file exists
+        /// </summary>
+        /// <param name="path">File path</param>
+        /// <returns>if exists</returns>
+        bool FileExistsCheck(string path);
     }
 }

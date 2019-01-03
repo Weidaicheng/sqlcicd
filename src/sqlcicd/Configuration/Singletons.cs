@@ -6,8 +6,24 @@ namespace sqlcicd.Configuration
     public class Singletons
     {
         /// <summary>
-        /// Repository path
+        /// Args
         /// </summary>
-        public static string Path { get; set; }
+        public static string[] Args { get; set; }
+
+        /// <summary>
+        /// Check if path is provided
+        /// </summary>
+        /// <returns>If path is provided</returns>
+        public static bool ArgsPathCheck()
+        {
+            if (Args.Length < 2)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }

@@ -1,9 +1,11 @@
 using System;
-using System.Data;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using sqlcicd.Configuration.Entity;
+using sqlcicd.Database.Entity;
+using sqlcicd.Exceptions;
 using sqlcicd.Files;
 using sqlcicd.Repository;
 using sqlcicd.Repository.Entity;
@@ -30,6 +32,11 @@ namespace sqlcicd.Configuration
         /// Base configuration file includes database type, repository type
         /// </summary>
         public const string BASE_CONFIG = ".sqlcicd";
+
+        /// <summary>
+        /// Connection string key in base configuration file
+        /// </summary>
+        public const string CONNECTION_STRING_KEY = "ConnectionString";
         #endregion
 
         private readonly IFileReader _fileReader;
@@ -39,44 +46,21 @@ namespace sqlcicd.Configuration
             _fileReader = fileReader;
         }
 
-        /// <summary>
-        /// Check if the file exists
-        /// </summary>
-        /// <param name="path">File path</param>
-        private void fileExistsCheck(string path)
-        {
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException($"{path} didn't find.");
-            }
-        }
-
-        public async Task<DbType> GetDbTypeConfiguration()
-        {
-            var path = $"{Singletons.Path}/{BASE_CONFIG}";
-            fileExistsCheck(path);
-
-            var lines = await _fileReader.GetLinesAsync(path);
-            var dbTypeConfig = lines.First(l => l.StartsWith(nameof(DbType)));
-
-            return (DbType)Enum.Parse(typeof(DbType), dbTypeConfig.Split(':')[1]);
-        }
-
-        public async Task<RepositoryType> GetRepositoryTypeConfiguration()
-        {
-            var path = $"{Singletons.Path}/{BASE_CONFIG}";
-            fileExistsCheck(path);
-
-            var lines = await _fileReader.GetLinesAsync(path);
-            var dbTypeConfig = lines.First(l => l.StartsWith(nameof(DbType)));
-
-            return (RepositoryType)Enum.Parse(typeof(RepositoryType), dbTypeConfig.Split(':')[1]);
-        }
-
         public async Task<SqlIgnoreConfiguration> GetSqlIgnoreConfiguration()
         {
-            var path = $"{Singletons.Path}/{SQL_IGNORE_CONFIG}";
-            fileExistsCheck(path);
+            if (!Singletons.ArgsPathCheck())
+            {
+                throw new PathNotProvidedException("Path is not provided.");
+            }
+
+            var path = $"{Singletons.Args[1]}/{SQL_IGNORE_CONFIG}";
+            if (!_fileReader.FileExistsCheck(path))
+            {
+                return new SqlIgnoreConfiguration()
+                {
+                    IgnoredFile = new List<string>()
+                };
+            }
 
             var lines = await _fileReader.GetLinesAsync(path);
 
@@ -88,14 +72,66 @@ namespace sqlcicd.Configuration
 
         public async Task<SqlOrderConfiguration> GetSqlOrderConfiguration()
         {
-            var path = $"{Singletons.Path}/{SQL_ORDER_CONFIG}";
-            fileExistsCheck(path);
+            if (!Singletons.ArgsPathCheck())
+            {
+                throw new PathNotProvidedException("Path is not provided.");
+            }
+
+            var path = $"{Singletons.Args[1]}/{SQL_ORDER_CONFIG}";
+            if (!_fileReader.FileExistsCheck(path))
+            {
+                return new SqlOrderConfiguration()
+                {
+                    FileOrder = new List<string>()
+                };
+            }
 
             var lines = await _fileReader.GetLinesAsync(path);
 
             return new SqlOrderConfiguration()
             {
                 FileOrder = lines
+            };
+        }
+
+        public async Task<BaseConfiguration> GetBaseConfiguration()
+        {
+            if (!Singletons.ArgsPathCheck())
+            {
+                throw new PathNotProvidedException("Path is not provided.");
+            }
+
+            var path = $"{Singletons.Args[1]}/{BASE_CONFIG}";
+            if (!_fileReader.FileExistsCheck(path))
+            {
+                throw new FileNotFoundException($"{path} hasn't found.");
+            }
+
+            var lines = await _fileReader.GetLinesAsync(path);
+            var dbTypeConfig = lines.FirstOrDefault(l => l.StartsWith(nameof(DbType)));
+            var repositoryTypeConfig = lines.FirstOrDefault(l => l.StartsWith(nameof(RepositoryType)));
+            var connectionString = lines.FirstOrDefault(l => l.StartsWith(CONNECTION_STRING_KEY));
+
+            #region Not configured check
+            if(string.IsNullOrEmpty(dbTypeConfig))
+            {
+                throw new DbTypeNotConfiguredException("DbType is not configured.");
+            }
+            if(string.IsNullOrEmpty(repositoryTypeConfig))
+            {
+                throw new RepositoryTypeNotConfiguredException("Repository type is not configred.");
+            }
+            if(string.IsNullOrEmpty(connectionString))
+            {
+                throw new ConnectionStringNotProvidedException("Connection string is not configured.");
+            }
+            #endregion
+
+            return new BaseConfiguration()
+            {
+                DbType = (DbType)Enum.Parse(typeof(DbType), dbTypeConfig.Split(':')[1]),
+                RepositoryType = (RepositoryType)Enum.Parse(typeof(RepositoryType), repositoryTypeConfig.Split(':')[1]),
+                ConnectionString = connectionString.Split(':')[1]
             };
         }
     }

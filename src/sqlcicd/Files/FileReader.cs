@@ -11,6 +11,18 @@ namespace sqlcicd.Files
     /// </summary>
     public class FileReader : IFileReader
     {
+        public bool FileExistsCheck(string path)
+        {
+            if (File.Exists(path))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// Get file content
         /// </summary>

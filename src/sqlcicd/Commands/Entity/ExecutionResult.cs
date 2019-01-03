@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace sqlcicd.Commands
+namespace sqlcicd.Commands.Entity
 {
     /// <summary>
     /// Execution result
@@ -18,8 +18,8 @@ namespace sqlcicd.Commands
         public object Result { get; set; }
 
         /// <summary>
-        /// Error messages
+        /// Error message
         /// </summary>
-        public IEnumerable<string> ErrorMessages { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

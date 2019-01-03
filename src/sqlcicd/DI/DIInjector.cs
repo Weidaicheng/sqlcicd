@@ -1,4 +1,5 @@
 using DependencyInjection.InConsole.Injec;
+using sqlcicd.Configuration;
 
 namespace sqlcicd.DI
 {
@@ -6,7 +7,19 @@ namespace sqlcicd.DI
     {
         public override void Inject()
         {
-            throw new System.NotImplementedException();
+            string command;
+            if (Singletons.Args.Length == 0)
+            {
+                command = CommandInjectorEnum.DEFAULT_CMD; // default command
+            }
+            else
+            {
+                command = Singletons.Args[0];
+            }
+
+            CommandInjectorEnum
+                .GetInjector(command)
+                .Inject(services);
         }
     }
 }

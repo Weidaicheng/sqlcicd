@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using sqlcicd.Commands.Entity;
 
 namespace sqlcicd.Commands
 {
@@ -10,8 +11,7 @@ namespace sqlcicd.Commands
         /// <summary>
         /// Execute command
         /// </summary>
-        /// <param name="args">Arguments</param>
         /// <returns>If execute successful</returns>
-        Task<ExecutionResult> Execute(string[] args);
+        Task<ExecutionResult> Execute();
     }
 }

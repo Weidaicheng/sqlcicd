@@ -1,4 +1,5 @@
 using sqlcicd.Database;
+using sqlcicd.Database.Entity;
 
 namespace sqlcicd.Repository.Entity
 {
@@ -7,7 +8,7 @@ namespace sqlcicd.Repository.Entity
     /// </summary>
     public class RepositoryVersion
     {
-        private RepositoryVersion(string version)
+        public RepositoryVersion(string version)
         {
             Version = version;
         }
