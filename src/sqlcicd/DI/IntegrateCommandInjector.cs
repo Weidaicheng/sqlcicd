@@ -5,7 +5,6 @@ using sqlcicd.Commands;
 using sqlcicd.Configuration;
 using sqlcicd.Configuration.Entity;
 using sqlcicd.Database;
-using sqlcicd.Database.Entity;
 using sqlcicd.Files;
 using sqlcicd.Repository;
 using sqlcicd.Repository.Entity;
@@ -21,6 +20,7 @@ namespace sqlcicd.DI
         {
             services.AddTransient<IFileReader, FileReader>();
             services.AddTransient<ISqlConfigurationReader, WithRepoConfigurationReader>();
+            services.AddTransient<ISysIgnoredFileProvider, WithRepoSysIgnoredFileProvider>();
             services.AddTransient<ISqlSelector, SqlSelector>();
 
             // add configurations
@@ -50,7 +50,7 @@ namespace sqlcicd.DI
             switch(baseConfig.DbType)
             {
                 case Database.Entity.DbType.Mssql:
-                    services.AddTransient<IGrammerChecker, MssqlGrammerChecker>();
+                    services.AddTransient<IGrammarChecker, MssqlGrammarChecker>();
                     services.AddTransient<IDbConnection>(provider => new SqlConnection(baseConfig.ConnectionString));
                     services.AddTransient<IDbNegotiator, MssqlNegotiator>();
                     break;

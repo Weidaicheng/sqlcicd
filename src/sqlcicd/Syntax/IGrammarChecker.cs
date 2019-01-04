@@ -1,12 +1,12 @@
 namespace sqlcicd.Syntax
 {
     /// <summary>
-    /// Sql grammer checker
+    /// Sql grammar checker
     /// </summary>
-    public interface IGrammerChecker
+    public interface IGrammarChecker
     {
         /// <summary>
-        /// Check grammer
+        /// Check grammar
         /// </summary>
         /// <param name="sql">Sql syntax that needs to be checked</param>
         /// <param name="errMsg">Error messages</param>

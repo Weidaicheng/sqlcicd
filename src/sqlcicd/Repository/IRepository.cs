@@ -12,7 +12,7 @@ namespace sqlcicd.Repository
         /// Get newest commit version
         /// </summary>
         /// <param name="repoPath">repository path</param>
-        /// <returns><see cref="IRepositoryVersion" /></returns>
+        /// <returns><see cref="RepositoryVersion" /></returns>
         RepositoryVersion GetNewestCommit(string repoPath);
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace sqlcicd.Repository
         /// </summary>
         /// <param name="repoPath">repository path</param>
         /// <param name="latestVersion">Latest committed version</param>
-        /// <param name="latestSqlVersion">Latest deliveried version</param>
+        /// <param name="latestSqlVersion">Latest delivered version</param>
         /// <returns>Changed files' path</returns>
         IEnumerable<string> GetChangedFiles(string repoPath, RepositoryVersion latestVersion, RepositoryVersion latestSqlVersion);
     }

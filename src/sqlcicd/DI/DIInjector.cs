@@ -7,15 +7,7 @@ namespace sqlcicd.DI
     {
         public override void Inject()
         {
-            string command;
-            if (Singletons.Args.Length == 0)
-            {
-                command = CommandInjectorEnum.DEFAULT_CMD; // default command
-            }
-            else
-            {
-                command = Singletons.Args[0];
-            }
+            var command = Singletons.Args.Length == 0 ? CommandInjectorEnum.DEFAULT_CMD : Singletons.Args[0];
 
             CommandInjectorEnum
                 .GetInjector(command)

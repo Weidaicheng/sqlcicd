@@ -1,4 +1,3 @@
-using sqlcicd.Database;
 using sqlcicd.Database.Entity;
 
 namespace sqlcicd.Repository.Entity
@@ -23,7 +22,14 @@ namespace sqlcicd.Repository.Entity
         /// </summary>
         public static RepositoryVersion GetRepositoryVersion(SqlVersion sv)
         {
-            return new RepositoryVersion(sv.Version);
+            if (sv == null || string.IsNullOrEmpty(sv.Version))
+            {
+                return null;
+            }
+            else
+            {
+                return new RepositoryVersion(sv.Version);                
+            }
         }
     }
 }

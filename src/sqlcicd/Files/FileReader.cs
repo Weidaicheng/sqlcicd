@@ -13,14 +13,7 @@ namespace sqlcicd.Files
     {
         public bool FileExistsCheck(string path)
         {
-            if (File.Exists(path))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return File.Exists(path);
         }
 
         /// <summary>
@@ -35,11 +28,11 @@ namespace sqlcicd.Files
                 throw new ArgumentNullException("File path is not provided.");
             }
 
-            using (FileStream fs = new FileStream(path, FileMode.Open))
+            using (var fs = new FileStream(path, FileMode.Open))
             {
-                using (StreamReader sr = new StreamReader(fs))
+                using (var sr = new StreamReader(fs))
                 {
-                    string content = await sr.ReadToEndAsync();
+                    var content = await sr.ReadToEndAsync();
 
                     sr.Close();
                     fs.Close();
@@ -57,11 +50,11 @@ namespace sqlcicd.Files
             }
 
             var lines = new List<string>();
-            using (FileStream fs = new FileStream(path, FileMode.Open))
+            using (var fs = new FileStream(path, FileMode.Open))
             {
-                using (StreamReader sr = new StreamReader(fs))
+                using (var sr = new StreamReader(fs))
                 {
-                    string line = await sr.ReadLineAsync();
+                    var line = await sr.ReadLineAsync();
                     while (line != null)
                     {
                         lines.Add(line);

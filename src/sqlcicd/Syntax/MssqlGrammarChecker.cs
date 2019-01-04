@@ -4,15 +4,15 @@ using Microsoft.SqlServer.Management.SqlParser.Parser;
 namespace sqlcicd.Syntax
 {
     /// <summary>
-    /// Microsoft SQL Server grammer checker
+    /// Microsoft SQL Server grammar checker
     /// </summary>
-    public class MssqlGrammerChecker : IGrammerChecker
+    public class MssqlGrammarChecker : IGrammarChecker
     {
         public bool Check(string sql, out string errMsg)
         {
             var result = Parser.Parse(sql);
             
-            if(result.Errors.Count() > 0)
+            if(result.Errors.Any())
             {
                 errMsg = result.Errors
                     .Select(e => e.Message)

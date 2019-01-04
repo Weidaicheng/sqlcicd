@@ -3,7 +3,7 @@ namespace sqlcicd.Configuration
     /// <summary>
     /// Singletons
     /// </summary>
-    public class Singletons
+    public static class Singletons
     {
         /// <summary>
         /// Args
@@ -16,14 +16,7 @@ namespace sqlcicd.Configuration
         /// <returns>If path is provided</returns>
         public static bool ArgsPathCheck()
         {
-            if (Args.Length < 2)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return Args.Length >= 2;
         }
     }
 }

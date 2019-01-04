@@ -12,10 +12,13 @@ namespace sqlcicd.Repository
         {
             using(var repo = new GitRepo(repoPath))
             {
-                var newestCommit = repo.Commits.FirstOrDefault(c => c.Sha == latestVersion.Version);
-                var lastDeliveredCommit = repo.Commits.FirstOrDefault(c => c.Sha == latestSqlVersion.Version);
+                // set commit to null, if the version is null
+                var newestCommit = latestVersion == null ? null : 
+                    repo.Commits.FirstOrDefault(c => c.Sha == latestVersion.Version);
+                var lastDeliveredCommit = latestSqlVersion == null ? null : 
+                    repo.Commits.FirstOrDefault(c => c.Sha == latestSqlVersion.Version);
 
-                var changes = repo.Diff.Compare<TreeChanges>(lastDeliveredCommit.Tree, newestCommit.Tree);
+                var changes = repo.Diff.Compare<TreeChanges>(lastDeliveredCommit?.Tree, newestCommit?.Tree);
                 var changedFiles = new List<string>();
                 changedFiles.AddRange(changes.Added.Select(c => c.Path).ToList());
                 changedFiles.AddRange(changes.Modified.Select(c => c.Path).ToList());

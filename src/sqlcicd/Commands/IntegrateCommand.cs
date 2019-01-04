@@ -22,21 +22,21 @@ namespace sqlcicd.Commands
         private readonly IRepository _repository;
         private readonly IDbNegotiator _dbNegotiator;
         private readonly ISqlSelector _sqlSelector;
-        private readonly IGrammerChecker _grammerChecker;
+        private readonly IGrammarChecker _grammarChecker;
         private readonly IFileReader _fileReader;
         private readonly SqlIgnoreConfiguration _sqlIgnoreConfiguration;
 
         public IntegrateCommand(IRepository repository,
             IDbNegotiator dbNegotiator,
             ISqlSelector sqlSelector,
-            IGrammerChecker grammerChecker,
+            IGrammarChecker grammarChecker,
             IFileReader fileReader,
             SqlIgnoreConfiguration sqlIgnoreConfiguration)
         {
             _repository = repository;
             _dbNegotiator = dbNegotiator;
             _sqlSelector = sqlSelector;
-            _grammerChecker = grammerChecker;
+            _grammarChecker = grammarChecker;
             _fileReader = fileReader;
             _sqlIgnoreConfiguration = sqlIgnoreConfiguration;
         }
@@ -69,21 +69,20 @@ namespace sqlcicd.Commands
 
             var hasErr = false;
             var errors = new List<string>();
-            // 5. check grammer
+            // 5. check grammar
             foreach (var file in changedFiles)
             {
-                var script = await _fileReader.GetContentAsync(file);
-                if (_grammerChecker.Check(script, out string errMsg))
-                {
-                    errors.Add(errMsg);
-                    hasErr = true;
-                }
+                if (!file.ToLower().EndsWith(".sql")) continue;
+                var script = await _fileReader.GetContentAsync($"{Singletons.Args[1]}/{file}");
+                if (_grammarChecker.Check(script, out var errMsg)) continue;
+                errors.Add(errMsg);
+                hasErr = true;
             }
 
             return new ExecutionResult()
             {
                 Success = !hasErr,
-                ErrorMessage = errors.Aggregate((prev, next) => $"{prev}\n{next}")
+                ErrorMessage = errors.Count == 0 ? string.Empty : errors.Aggregate((prev, next) => $"{prev}\n{next}")
             };
         }
     }

@@ -1,6 +1,8 @@
 global.json
 .vs/*
 .vscode/*
+.idea/*
+*.user
 src/sqlcicd/bin/*
 src/sqlcicd/obj/*
 test/sqlcicd.Tests/bin/*

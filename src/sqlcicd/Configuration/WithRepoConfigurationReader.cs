@@ -119,7 +119,7 @@ namespace sqlcicd.Configuration
             }
             if(string.IsNullOrEmpty(repositoryTypeConfig))
             {
-                throw new RepositoryTypeNotConfiguredException("Repository type is not configred.");
+                throw new RepositoryTypeNotConfiguredException("Repository type is not configured.");
             }
             if(string.IsNullOrEmpty(connectionString))
             {

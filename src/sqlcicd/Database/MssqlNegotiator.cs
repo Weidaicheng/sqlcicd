@@ -22,7 +22,7 @@ namespace sqlcicd.Database
 
         public async Task<SqlVersion> GetLatestSqlVersion()
         {
-            return await _dbConnection.QueryFirstAsync<SqlVersion>($@"SELECT 
+            return await _dbConnection.QueryFirstOrDefaultAsync<SqlVersion>($@"SELECT 
                 {nameof(SqlVersion.Id)}, 
                 {nameof(SqlVersion.RepositoryType)},
                 {nameof(SqlVersion.Version)},
@@ -30,9 +30,9 @@ namespace sqlcicd.Database
                 {nameof(SqlVersion.TransactionCost)},
                 {nameof(SqlVersion.LastVersion)},
                 {nameof(SqlVersion.IsLatest)},
-                {nameof(SqlVersion.IsRollbacked)} 
+                {nameof(SqlVersion.IsRollBacked)} 
                 FROM {nameof(SqlVersion)} 
-                WHERE {nameof(SqlVersion.IsLatest)} = TRUE");
+                WHERE {nameof(SqlVersion.IsLatest)} = 1;");
         }
 
         public async Task<IEnumerable<SqlVersion>> GetSqlVersions()

@@ -1,7 +1,5 @@
 using System;
-using sqlcicd.Repository;
 using sqlcicd.Repository.Entity;
-using sqlcicd.Utility;
 
 namespace sqlcicd.Database.Entity
 {
@@ -13,7 +11,7 @@ namespace sqlcicd.Database.Entity
         /// <summary>
         /// Id
         /// </summary>
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Repository type
@@ -38,7 +36,7 @@ namespace sqlcicd.Database.Entity
         /// <summary>
         /// The last version
         /// </summary>
-        public Guid? LastVersion { get; set; }
+        public int? LastVersion { get; set; }
 
         /// <summary>
         /// Is this the latest version
@@ -46,21 +44,13 @@ namespace sqlcicd.Database.Entity
         public bool IsLatest { get; set; }
 
         /// <summary>
-        /// Has this version been rollbacked
+        /// Has this version been roll backed
         /// </summary>
-        public bool IsRollbacked { get; set; }
+        public bool IsRollBacked { get; set; }
 
         /// <summary>
-        /// Can this version be rollbacked
+        /// Can this version be roll backed
         /// </summary>
-        public bool CanRollback
-        {
-            get
-            {
-                if (LastVersion == null)
-                    return false;
-                return true;
-            }
-        }
+        public bool CanRollback => LastVersion != null;
     }
 }

@@ -5,12 +5,12 @@ namespace sqlcicd.Tests
 {
     public class MssqlGrammerCheckerTest
     {
-        private MssqlGrammerChecker checker;
+        private MssqlGrammarChecker checker;
 
         [SetUp]
         public void SetUp()
         {
-            checker = new MssqlGrammerChecker();
+            checker = new MssqlGrammarChecker();
         }
 
         [Test]

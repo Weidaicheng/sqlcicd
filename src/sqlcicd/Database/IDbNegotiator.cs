@@ -35,7 +35,7 @@ namespace sqlcicd.Database
         Task InsertSqlVersion(SqlVersion sv);
 
         /// <summary>
-        /// Set a sql version record to rollbacked
+        /// Set a sql version record to roll backed
         /// </summary>
         /// <param name="sv"><see cref="SqlVersion" /></param>
         Task SetSqlVersionRollback(SqlVersion sv);
