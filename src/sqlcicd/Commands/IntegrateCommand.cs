@@ -47,6 +47,11 @@ namespace sqlcicd.Commands
         /// <returns><see cref="ExecutionResult" /></returns>
         public async Task<ExecutionResult> Execute()
         {
+            if (!Singletons.ArgsPathCheck())
+            {
+                throw new PathNotProvidedException("Path is not provided.");
+            }
+
             var path = Singletons.Args[1];
 
             // 1. get newest version from repository

@@ -17,6 +17,16 @@ namespace sqlcicd.Commands
         }
 
         /// <summary>
+        /// Print error
+        /// </summary>
+        /// <param name="error">error message</param>
+        private void printError(string error)
+        {
+            Console.WriteLine("Error:");
+            Console.WriteLine($"\t{error}");
+        }
+
+        /// <summary>
         /// Execute command
         /// </summary>
         /// <returns><see cref="ExecutionResult" /></returns>
@@ -25,11 +35,15 @@ namespace sqlcicd.Commands
             try
             {
                 var result = await _command.Execute();
-                // TODO: print errors
-                
+
+                if (!result.Success)
+                {
+                    printError(result.ErrorMessage);
+                }
+
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new ExecutionResult()
                 {
