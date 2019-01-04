@@ -12,8 +12,6 @@ namespace sqlcicd
     {
         static async Task<int> Main(string[] args)
         {
-            // try
-            // {
             // save args
             Singletons.Args = args;
 
@@ -22,16 +20,10 @@ namespace sqlcicd
 
             // execute
             var command = provider.GetRequiredService<ICommand>();
-            var invoker = new CommandInvoker(command);
+            ICommandInvoker invoker = new CMDCommandInvoker(command);
             var result = await invoker.Invoke();
 
             return result.Success ? 0 : -1;
-            // }
-            // catch (Exception ex)
-            // {
-            //     Console.WriteLine(ex.Message);
-            //     return -1;
-            // }
         }
     }
 }

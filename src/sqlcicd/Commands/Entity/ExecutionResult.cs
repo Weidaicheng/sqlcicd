@@ -13,11 +13,6 @@ namespace sqlcicd.Commands.Entity
         public bool Success { get; set; }
 
         /// <summary>
-        /// Execution return result
-        /// </summary>
-        public object Result { get; set; }
-
-        /// <summary>
         /// Error message
         /// </summary>
         public string ErrorMessage { get; set; }

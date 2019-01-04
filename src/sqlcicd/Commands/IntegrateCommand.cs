@@ -75,20 +75,9 @@ namespace sqlcicd.Commands
                 }
             }
 
-            // 6. print errors
-            if (hasErr)
-            {
-                Console.WriteLine("Syntax check result: ");
-                foreach (var e in errors)
-                {
-                    Console.WriteLine($"\t{e}");
-                }
-            }
-
             return new ExecutionResult()
             {
                 Success = !hasErr,
-                Result = null,
                 ErrorMessage = errors.Aggregate((prev, next) => $"{prev}\n{next}")
             };
         }
