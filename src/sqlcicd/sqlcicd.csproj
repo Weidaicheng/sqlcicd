@@ -11,6 +11,7 @@
     <PackageReference Include="DependencyInjection.InConsole" Version="1.2.3-preview" />
     <PackageReference Include="LibGit2Sharp" Version="0.25.4" />
     <PackageReference Include="Microsoft.SqlServer.SqlParser" Version="150.18068.0-xplat" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
   </ItemGroup>
 
 </Project>

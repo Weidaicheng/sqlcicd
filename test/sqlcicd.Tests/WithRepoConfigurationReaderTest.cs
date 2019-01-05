@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace sqlcicd.Tests
                 ""
             }.ToArray();
 
-            Assert.Catch<PathNotProvidedException>(() => 
+            Assert.Catch<ArgumentNullException>(() => 
             {
                 confReader.GetSqlIgnoreConfiguration().GetAwaiter().GetResult();
             });
@@ -81,7 +82,7 @@ namespace sqlcicd.Tests
                 ""
             }.ToArray();
 
-            Assert.Catch<PathNotProvidedException>(() => 
+            Assert.Catch<ArgumentNullException>(() => 
             {
                 confReader.GetSqlOrderConfiguration().GetAwaiter().GetResult();
             });
@@ -138,7 +139,7 @@ namespace sqlcicd.Tests
                 ""
             }.ToArray();
 
-            Assert.Catch<PathNotProvidedException>(() => 
+            Assert.Catch<ArgumentNullException>(() => 
             {
                 confReader.GetBaseConfiguration().GetAwaiter().GetResult();
             });

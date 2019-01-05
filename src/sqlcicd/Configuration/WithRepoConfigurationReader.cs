@@ -7,7 +7,6 @@ using sqlcicd.Configuration.Entity;
 using sqlcicd.Database.Entity;
 using sqlcicd.Exceptions;
 using sqlcicd.Files;
-using sqlcicd.Repository;
 using sqlcicd.Repository.Entity;
 
 namespace sqlcicd.Configuration
@@ -48,12 +47,7 @@ namespace sqlcicd.Configuration
 
         public async Task<SqlIgnoreConfiguration> GetSqlIgnoreConfiguration()
         {
-            if (!Singletons.ArgsPathCheck())
-            {
-                throw new PathNotProvidedException("Path is not provided.");
-            }
-
-            var path = $"{Singletons.Args[1]}/{SQL_IGNORE_CONFIG}";
+            var path = $"{Singletons.GetPath()}/{SQL_IGNORE_CONFIG}";
             if (!_fileReader.FileExistsCheck(path))
             {
                 return new SqlIgnoreConfiguration()
@@ -72,12 +66,7 @@ namespace sqlcicd.Configuration
 
         public async Task<SqlOrderConfiguration> GetSqlOrderConfiguration()
         {
-            if (!Singletons.ArgsPathCheck())
-            {
-                throw new PathNotProvidedException("Path is not provided.");
-            }
-
-            var path = $"{Singletons.Args[1]}/{SQL_ORDER_CONFIG}";
+            var path = $"{Singletons.GetPath()}/{SQL_ORDER_CONFIG}";
             if (!_fileReader.FileExistsCheck(path))
             {
                 return new SqlOrderConfiguration()
@@ -96,12 +85,7 @@ namespace sqlcicd.Configuration
 
         public async Task<BaseConfiguration> GetBaseConfiguration()
         {
-            if (!Singletons.ArgsPathCheck())
-            {
-                throw new PathNotProvidedException("Path is not provided.");
-            }
-
-            var path = $"{Singletons.Args[1]}/{BASE_CONFIG}";
+            var path = $"{Singletons.GetPath()}/{BASE_CONFIG}";
             if (!_fileReader.FileExistsCheck(path))
             {
                 throw new FileNotFoundException($"{path} hasn't found.");

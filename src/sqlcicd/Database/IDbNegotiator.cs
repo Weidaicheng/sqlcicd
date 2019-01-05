@@ -15,6 +15,13 @@ namespace sqlcicd.Database
         /// <param name="sqlScript">sql script</param>
         Task Execute(string sqlScript);
 
+        /// <summary>
+        /// Execute batch script
+        /// </summary>
+        /// <param name="sqlScripts">sql scripts</param>
+        /// <returns></returns>
+        Task ExecuteBunch(IEnumerable<string> sqlScripts);
+
         #region SqlVersion operations
         /// <summary>
         /// Get all sql version records

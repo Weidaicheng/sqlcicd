@@ -47,12 +47,7 @@ namespace sqlcicd.Commands
         /// <returns><see cref="ExecutionResult" /></returns>
         public async Task<ExecutionResult> Execute()
         {
-            if (!Singletons.ArgsPathCheck())
-            {
-                throw new PathNotProvidedException("Path is not provided.");
-            }
-
-            var path = Singletons.Args[1];
+            var path = Singletons.GetPath();
 
             // 1. get newest version from repository
             var newest = _repository.GetNewestCommit(path);
@@ -73,7 +68,7 @@ namespace sqlcicd.Commands
             foreach (var file in changedFiles)
             {
                 if (!file.ToLower().EndsWith(".sql")) continue;
-                var script = await _fileReader.GetContentAsync($"{Singletons.Args[1]}/{file}");
+                var script = await _fileReader.GetContentAsync($"{Singletons.GetPath()}/{file}");
                 if (_grammarChecker.Check(script, out var errMsg)) continue;
                 errors.Add(errMsg);
                 hasErr = true;

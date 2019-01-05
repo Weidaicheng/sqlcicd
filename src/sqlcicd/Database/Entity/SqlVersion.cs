@@ -1,5 +1,6 @@
 using System;
 using sqlcicd.Repository.Entity;
+using sqlcicd.Utility;
 
 namespace sqlcicd.Database.Entity
 {
@@ -8,6 +9,26 @@ namespace sqlcicd.Database.Entity
     /// </summary>
     public class SqlVersion
     {
+        public SqlVersion()
+        {
+        }
+
+        public SqlVersion(
+            RepositoryType repositoryType,
+            string version,
+            int transactionCost
+        )
+        {
+            RepositoryType = repositoryType;
+            Version = version;
+            DeliveryTime = TimeUtility.Now;
+            TransactionCost = transactionCost;
+            LastVersion = null;
+            IsLatest = true;
+            IsRollBacked = false;
+            IsDeleted = false;
+        }
+
         /// <summary>
         /// Id
         /// </summary>
@@ -47,6 +68,11 @@ namespace sqlcicd.Database.Entity
         /// Has this version been roll backed
         /// </summary>
         public bool IsRollBacked { get; set; }
+
+        /// <summary>
+        /// Is deleted
+        /// </summary>
+        public bool IsDeleted { get; set; }
 
         /// <summary>
         /// Can this version be roll backed
