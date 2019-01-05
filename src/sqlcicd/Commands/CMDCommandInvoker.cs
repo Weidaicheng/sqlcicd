@@ -36,8 +36,7 @@ namespace sqlcicd.Commands
             try
             {
                 var result = await _command.Execute();
-                var resultStr = result.Success ? "success." : "fail.";
-                Console.WriteLine($"{CommandEnum.CommandDescription[Singletons.GetCmd()]} {resultStr}");
+                
                 if (!result.Success)
                 {
                     printError(result.ErrorMessage);

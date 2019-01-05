@@ -2,6 +2,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using sqlcicd.Commands;
+using sqlcicd.Commands.Entity;
 using sqlcicd.Configuration;
 using sqlcicd.Configuration.Entity;
 using sqlcicd.Database;
@@ -19,6 +20,14 @@ namespace sqlcicd.DI
     {
         public void Inject(IServiceCollection services)
         {
+            if (Singletons.GetSubCmd().ToLower() == CommandEnum.HELP_CMD ||
+                Singletons.GetSubCmd().ToLower() == CommandEnum.HELP_CMD_SHORT)
+            {
+                new HelpCommandInjector()
+                    .Inject(services);
+                return;
+            }
+            
             services.AddTransient<IFileReader, FileReader>();
             services.AddTransient<ISqlConfigurationReader, WithRepoConfigurationReader>();
             services.AddTransient<ISysIgnoredFileProvider, WithRepoSysIgnoredFileProvider>();

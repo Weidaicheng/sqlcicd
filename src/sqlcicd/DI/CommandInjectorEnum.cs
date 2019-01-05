@@ -21,6 +21,9 @@ namespace sqlcicd.DI
             // delivery command
             commands.Add(CommandEnum.DELIVERY_CMD, new DeliveryCommandInjector());
             commands.Add(CommandEnum.DELIVERY_CMD_SHORT, new DeliveryCommandInjector());
+            // help command
+            commands.Add(CommandEnum.HELP_CMD, new HelpCommandInjector());
+            commands.Add(CommandEnum.HELP_CMD_SHORT, new HelpCommandInjector());
         }
 
         /// <summary>
