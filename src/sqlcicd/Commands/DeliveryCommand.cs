@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Transactions;
 using sqlcicd.Commands.Entity;
 using sqlcicd.Configuration;
 using sqlcicd.Configuration.Entity;
 using sqlcicd.Database;
+using sqlcicd.Database.Entity;
 using sqlcicd.Files;
 using sqlcicd.Repository;
 using sqlcicd.Repository.Entity;
 using sqlcicd.Syntax;
+using sqlcicd.Utility;
 
 namespace sqlcicd.Commands
 {
@@ -25,6 +29,7 @@ namespace sqlcicd.Commands
         private readonly IFileReader _fileReader;
         private readonly SqlIgnoreConfiguration _sqlIgnoreConfiguration;
         private readonly SqlOrderConfiguration _sqlOrderConfiguration;
+        private readonly BaseConfiguration _baseConfiguration;
 
         public DeliveryCommand(IRepository repository,
             IDbNegotiator dbNegotiator,
@@ -32,7 +37,8 @@ namespace sqlcicd.Commands
             IGrammarChecker grammarChecker,
             IFileReader fileReader,
             SqlIgnoreConfiguration sqlIgnoreConfiguration,
-            SqlOrderConfiguration sqlOrderConfiguration)
+            SqlOrderConfiguration sqlOrderConfiguration,
+            BaseConfiguration baseConfiguration)
         {
             _repository = repository;
             _dbNegotiator = dbNegotiator;
@@ -41,8 +47,9 @@ namespace sqlcicd.Commands
             _fileReader = fileReader;
             _sqlIgnoreConfiguration = sqlIgnoreConfiguration;
             _sqlOrderConfiguration = sqlOrderConfiguration;
+            _baseConfiguration = baseConfiguration;
         }
-        
+
         public async Task<ExecutionResult> Execute()
         {
             var path = Singletons.GetPath();
@@ -51,6 +58,13 @@ namespace sqlcicd.Commands
             var newest = _repository.GetNewestCommit(path);
 
             // 2. get latest version from db
+            // check if table SqlVersion exists
+            if (!await _dbNegotiator.IsVersionTableExists())
+            {
+                // create table
+                await _dbNegotiator.CreateVersionTable();
+            }
+
             var latestSqlVersion = await _dbNegotiator.GetLatestSqlVersion();
             var latest = RepositoryVersion.GetRepositoryVersion(latestSqlVersion);
 
@@ -59,7 +73,7 @@ namespace sqlcicd.Commands
 
             // 4. exclude ignored files
             _sqlSelector.Exclude(_sqlIgnoreConfiguration, ref changedFiles);
-            
+
             // 5. sort files
             _sqlSelector.Sort(_sqlOrderConfiguration, ref changedFiles);
 
@@ -69,10 +83,44 @@ namespace sqlcicd.Commands
                 var scripts = await Task.WhenAll(changedFiles
                     .Where(file => file.ToLower().EndsWith(".sql"))
                     .Select(async file => await _fileReader.GetContentAsync($"{Singletons.GetPath()}/{file}"))
-                    .ToList()) ;
-                
-                await _dbNegotiator.ExecuteBunch(scripts);
-                
+                    .ToList());
+
+                if (!scripts.Any())
+                {
+                    goto goto_end;
+                }
+
+                using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    // execute all scripts
+                    var beginTime = TimeUtility.Now;
+                    foreach (var script in scripts)
+                    {
+                        await _dbNegotiator.Execute(script);
+                    }
+
+                    var endTime = TimeUtility.Now;
+
+                    // insert delivery record
+                    var sv = new SqlVersion(_baseConfiguration.RepositoryType, newest.Version,
+                        0); // TODO: change 0 to a real number
+
+                    // 1.get the latest version
+                    var preVersion = await _dbNegotiator.GetLatestSqlVersion();
+                    // 2.set sv.LastVersion = lastV.Id, sv.IsLatest = true
+                    sv.IsLatest = true;
+                    sv.LastVersion = preVersion?.Id;
+                    // 3.update all other records.IsLatest = false
+                    await _dbNegotiator.SetAllNonLatest();
+                    // 4.insert sv
+                    // set transaction cost
+                    sv.TransactionCost = (endTime - beginTime).TotalMilliseconds;
+                    await _dbNegotiator.InsertSqlVersion(sv);
+
+                    trans.Complete();
+                }
+
+                goto_end:
                 return new ExecutionResult()
                 {
                     Success = true,

@@ -50,9 +50,9 @@ namespace sqlcicd.Database.Entity
         public DateTime DeliveryTime { get; set; }
 
         /// <summary>
-        /// Transaction time cost, total seconds
+        /// Transaction time cost, total milli seconds
         /// </summary>
-        public int TransactionCost { get; set; }
+        public double TransactionCost { get; set; }
 
         /// <summary>
         /// The last version

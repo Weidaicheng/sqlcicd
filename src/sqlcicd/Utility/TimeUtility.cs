@@ -7,28 +7,9 @@ namespace sqlcicd.Utility
     /// </summary>
     public class TimeUtility
     {
-        private static DateTime now;
-
-        static TimeUtility()
-        {
-            now = DateTime.UtcNow;
-        }
-
         /// <summary>
         /// Now
         /// </summary>
-        public static DateTime Now 
-        { 
-            get
-            {
-                return now;
-            }
-            #if DEBUG
-            set
-            {
-                now = value;
-            }
-            #endif
-        }
+        public static DateTime Now => DateTime.UtcNow;
     }
 }

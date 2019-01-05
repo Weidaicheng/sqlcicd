@@ -16,18 +16,16 @@ namespace sqlcicd.Database
         Task Execute(string sqlScript);
 
         /// <summary>
-        /// Execute batch script
+        /// Check if <see cref="SqlVersion"/> table exists
         /// </summary>
-        /// <param name="sqlScripts">sql scripts</param>
         /// <returns></returns>
-        Task ExecuteBunch(IEnumerable<string> sqlScripts);
+        Task<bool> IsVersionTableExists();
 
-        #region SqlVersion operations
         /// <summary>
-        /// Get all sql version records
+        /// Create <see cref="SqlVersion"/> table
         /// </summary>
-        /// <returns><see cref="SqlVersion" /> collection</returns>
-        Task<IEnumerable<SqlVersion>> GetSqlVersions();
+        /// <returns></returns>
+        Task CreateVersionTable();
 
         /// <summary>
         /// Get latest sql version record
@@ -36,16 +34,21 @@ namespace sqlcicd.Database
         Task<SqlVersion> GetLatestSqlVersion();
 
         /// <summary>
+        /// Set all records as non latest
+        /// </summary>
+        /// <returns></returns>
+        Task SetAllNonLatest();
+
+        /// <summary>
         /// Insert a sql version record
         /// </summary>
         /// <param name="sv"><see cref="SqlVersion" /></param>
         Task InsertSqlVersion(SqlVersion sv);
 
-        /// <summary>
-        /// Set a sql version record to roll backed
-        /// </summary>
-        /// <param name="sv"><see cref="SqlVersion" /></param>
-        Task SetSqlVersionRollback(SqlVersion sv);
-        #endregion
+//        /// <summary>
+//        /// Set a sql version record to roll backed
+//        /// </summary>
+//        /// <param name="sv"><see cref="SqlVersion" /></param>
+//        Task SetSqlVersionRollback(SqlVersion sv);
     }
 }

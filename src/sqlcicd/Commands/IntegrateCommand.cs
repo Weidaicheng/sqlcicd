@@ -53,6 +53,12 @@ namespace sqlcicd.Commands
             var newest = _repository.GetNewestCommit(path);
 
             // 2. get latest version from db
+            // check if table SqlVersion exists
+            if (!await _dbNegotiator.IsVersionTableExists())
+            {
+                // create table
+                await _dbNegotiator.CreateVersionTable();
+            }
             var latestSqlVersion = await _dbNegotiator.GetLatestSqlVersion();
             var latest = RepositoryVersion.GetRepositoryVersion(latestSqlVersion);
 

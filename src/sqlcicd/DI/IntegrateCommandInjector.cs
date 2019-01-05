@@ -23,7 +23,6 @@ namespace sqlcicd.DI
             services.AddTransient<ISqlConfigurationReader, WithRepoConfigurationReader>();
             services.AddTransient<ISysIgnoredFileProvider, WithRepoSysIgnoredFileProvider>();
             services.AddTransient<ISqlSelector, SqlSelector>();
-            services.AddTransient<IDbNegotiator, DbNegotiator>();
 
             // add configurations
             services.AddTransient<SqlIgnoreConfiguration>(provider =>
@@ -54,6 +53,7 @@ namespace sqlcicd.DI
                 case Database.Entity.DbType.Mssql:
                     services.AddTransient<IGrammarChecker, MssqlGrammarChecker>();
                     services.AddTransient<IDbConnection>(provider => new SqlConnection(baseConfig.ConnectionString));
+                    services.AddTransient<IDbNegotiator, MssqlNegotiator>();
                     break;
                     // TODO: other cases
                 default:
