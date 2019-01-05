@@ -17,27 +17,10 @@ namespace sqlcicd.Tests
     public class WithRepoConfigurationReaderTest
     {
         [Test]
-        public void GetSqlIgnoreConfiguration_PathNotProvided_ThrowsException()
-        {
-            var confReader = new WithRepoConfigurationReader(null);
-            Singletons.Args = new List<string>()
-            {
-                ""
-            }.ToArray();
-
-            Assert.Catch<ArgumentNullException>(() => 
-            {
-                confReader.GetSqlIgnoreConfiguration().GetAwaiter().GetResult();
-            });
-        }
-
-        [Test]
         public async Task GetSqlIgnoreConfiguration_FileNotExists_ReturnsEmptyList()
         {
             Singletons.Args = new List<string>()
             {
-                "",
-                ""
             }.ToArray();
 
             var fileReader = Substitute.For<IFileReader>();
@@ -54,8 +37,6 @@ namespace sqlcicd.Tests
         {
             Singletons.Args = new List<string>()
             {
-                "",
-                ""
             }.ToArray();
 
             var fileReader = Substitute.For<IFileReader>();
@@ -74,27 +55,10 @@ namespace sqlcicd.Tests
         }
 
         [Test]
-        public void GetSqlOrderConfiguration_PathNotProvided_ThrowsException()
-        {
-            var confReader = new WithRepoConfigurationReader(null);
-            Singletons.Args = new List<string>()
-            {
-                ""
-            }.ToArray();
-
-            Assert.Catch<ArgumentNullException>(() => 
-            {
-                confReader.GetSqlOrderConfiguration().GetAwaiter().GetResult();
-            });
-        }
-
-        [Test]
         public async Task GetSqlOrderConfiguration_FileNotExists_ReturnsEmptyList()
         {
             Singletons.Args = new List<string>()
             {
-                "",
-                ""
             }.ToArray();
 
             var fileReader = Substitute.For<IFileReader>();
@@ -111,8 +75,6 @@ namespace sqlcicd.Tests
         {
             Singletons.Args = new List<string>()
             {
-                "",
-                ""
             }.ToArray();
 
             var fileReader = Substitute.For<IFileReader>();
@@ -131,27 +93,10 @@ namespace sqlcicd.Tests
         }
 
         [Test]
-        public void GetBaseConfiguration_PathNotProvided_ThrowsException()
-        {
-            var confReader = new WithRepoConfigurationReader(null);
-            Singletons.Args = new List<string>()
-            {
-                ""
-            }.ToArray();
-
-            Assert.Catch<ArgumentNullException>(() => 
-            {
-                confReader.GetBaseConfiguration().GetAwaiter().GetResult();
-            });
-        }
-
-        [Test]
         public void GetBaseConfiguration_FileNotExists_ThrowsException()
         {
             Singletons.Args = new List<string>()
             {
-                "",
-                ""
             }.ToArray();
 
             var fileReader = Substitute.For<IFileReader>();
@@ -169,8 +114,6 @@ namespace sqlcicd.Tests
         {
             Singletons.Args = new List<string>()
             {
-                "",
-                ""
             }.ToArray();
 
             var fileReader = Substitute.For<IFileReader>();
@@ -194,8 +137,6 @@ namespace sqlcicd.Tests
         {
             Singletons.Args = new List<string>()
             {
-                "",
-                ""
             }.ToArray();
 
             var fileReader = Substitute.For<IFileReader>();
@@ -219,8 +160,6 @@ namespace sqlcicd.Tests
         {
             Singletons.Args = new List<string>()
             {
-                "",
-                ""
             }.ToArray();
 
             var fileReader = Substitute.For<IFileReader>();
@@ -244,8 +183,6 @@ namespace sqlcicd.Tests
         {
             Singletons.Args = new List<string>()
             {
-                "",
-                ""
             }.ToArray();
 
             var fileReader = Substitute.For<IFileReader>();

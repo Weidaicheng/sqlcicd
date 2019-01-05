@@ -20,14 +20,6 @@ namespace sqlcicd.DI
     {
         public void Inject(IServiceCollection services)
         {
-            if (Singletons.GetSubCmd().ToLower() == CommandEnum.HELP_CMD ||
-                Singletons.GetSubCmd().ToLower() == CommandEnum.HELP_CMD_SHORT)
-            {
-                new HelpCommandInjector()
-                    .Inject(services);
-                return;
-            }
-            
             services.AddTransient<IFileReader, FileReader>();
             services.AddTransient<ISqlConfigurationReader, WithRepoConfigurationReader>();
             services.AddTransient<ISysIgnoredFileProvider, WithRepoSysIgnoredFileProvider>();

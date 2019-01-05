@@ -4,7 +4,6 @@ using DependencyInjection.InConsole;
 using Microsoft.Extensions.DependencyInjection;
 using sqlcicd.Commands;
 using sqlcicd.Configuration;
-using sqlcicd.Exceptions;
 
 namespace sqlcicd
 {

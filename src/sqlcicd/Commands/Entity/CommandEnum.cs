@@ -28,8 +28,8 @@ namespace sqlcicd.Commands.Entity
             {INTEGRATE_CMD_SHORT, "Continuous Integrate"},
             {DELIVERY_CMD, "Continuous Delivery"},
             {DELIVERY_CMD_SHORT, "Continuous Delivery"},
-            {HELP_CMD, "Help"},
-            {HELP_CMD_SHORT, "Help"}
+            {HELP_CMD, "Display help"},
+            {HELP_CMD_SHORT, "Display help"}
         };
     }
 }

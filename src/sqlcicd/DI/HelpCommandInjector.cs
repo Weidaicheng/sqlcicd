@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using sqlcicd.Commands;
 using sqlcicd.Commands.Entity;
 using sqlcicd.Configuration;
+using sqlcicd.Exceptions;
 using sqlcicd.Help;
 
 namespace sqlcicd.DI
@@ -13,28 +14,24 @@ namespace sqlcicd.DI
     {
         public void Inject(IServiceCollection services)
         {
-            if ((Singletons.GetCmd().ToLower() != CommandEnum.HELP_CMD &&
-                 Singletons.GetCmd().ToLower() != CommandEnum.HELP_CMD_SHORT) &&
-                (Singletons.GetSubCmd().ToLower() == CommandEnum.HELP_CMD ||
-                 Singletons.GetSubCmd().ToLower() == CommandEnum.HELP_CMD_SHORT))
+            // sub help
+            switch (Singletons.GetSubCmd())
             {
-                // sub help
-                switch (Singletons.GetCmd())
-                {
-                    case CommandEnum.INTEGRATE_CMD:
-                    case CommandEnum.INTEGRATE_CMD_SHORT:
-                        services.AddTransient<ICMDHelpDisplay, IntegrateCMDHelpDisplay>();
-                        break;
-                    case CommandEnum.DELIVERY_CMD:
-                    case CommandEnum.DELIVERY_CMD_SHORT:
-                        services.AddTransient<ICMDHelpDisplay, DeliveryCMDHelpDisplay>();
-                        break;
-                }
-            }
-            else
-            {
-                // global help
-                services.AddTransient<ICMDHelpDisplay, GlobalCMDHelpDisplay>();
+                case CommandEnum.HELP_CMD:
+                case CommandEnum.HELP_CMD_SHORT:
+                    services.AddTransient<ICMDHelpDisplay, GlobalCMDHelpDisplay>();
+                    break;
+                case CommandEnum.INTEGRATE_CMD:
+                case CommandEnum.INTEGRATE_CMD_SHORT:
+                    services.AddTransient<ICMDHelpDisplay, IntegrateCMDHelpDisplay>();
+                    break;
+                case CommandEnum.DELIVERY_CMD:
+                case CommandEnum.DELIVERY_CMD_SHORT:
+                    services.AddTransient<ICMDHelpDisplay, DeliveryCMDHelpDisplay>();
+                    break;
+                default:
+                    throw new UnSupportedCommandException(
+                        $"Command {Singletons.GetSubCmd()} is not supported, please try again");
             }
 
             // add command
