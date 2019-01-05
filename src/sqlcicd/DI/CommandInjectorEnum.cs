@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using sqlcicd.Commands.Entity;
 using sqlcicd.Exceptions;
 
 namespace sqlcicd.DI
@@ -8,24 +9,18 @@ namespace sqlcicd.DI
     /// </summary>
     public class CommandInjectorEnum
     {
-        #region const
-        public const string DEFAULT_CMD = "";
-        public const string INTEGRATE_CMD = "--integrate";
-        public const string INTEGRATE_CMD_SHORT = "-i";
-        #endregion
-
         private static Dictionary<string, ICommandInjector> commands;
 
         static CommandInjectorEnum()
         {
             commands = new Dictionary<string, ICommandInjector>();
 
-            // TODO: add commands
-            // default command TODO: change to DocCommandInjector
-            commands.Add(DEFAULT_CMD, new IntegrateCommandInjector());
             // integrate command
-            commands.Add(INTEGRATE_CMD, new IntegrateCommandInjector());
-            commands.Add(INTEGRATE_CMD_SHORT, new IntegrateCommandInjector());
+            commands.Add(CommandEnum.INTEGRATE_CMD, new IntegrateCommandInjector());
+            commands.Add(CommandEnum.INTEGRATE_CMD_SHORT, new IntegrateCommandInjector());
+            // delivery command
+            commands.Add(CommandEnum.DELIVERY_CMD, new DeliveryCommandInjector());
+            commands.Add(CommandEnum.DELIVERY_CMD_SHORT, new DeliveryCommandInjector());
         }
 
         /// <summary>

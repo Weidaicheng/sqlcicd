@@ -1,6 +1,5 @@
 using System;
-using System.Resources;
-using sqlcicd.Exceptions;
+using sqlcicd.Commands.Entity;
 
 namespace sqlcicd.Configuration
 {
@@ -15,12 +14,17 @@ namespace sqlcicd.Configuration
         public static string[] Args { private get; set; }
 
         /// <summary>
+        /// Default command
+        /// </summary>
+        public static string DEFAULT_CMD { get; } = CommandEnum.HELP_CMD;
+
+        /// <summary>
         /// Check if path is provided
         /// </summary>
         /// <returns>If path is provided</returns>
         private static bool argsPathCheck()
         {
-            return Args.Length >= 2;
+            return Args?.Length >= 2;
         }
         
         /// <summary>
@@ -29,7 +33,7 @@ namespace sqlcicd.Configuration
         /// <returns>If command is provided</returns>
         private static bool argsCmdCheck()
         {
-            return Args.Length >= 1;
+            return Args?.Length >= 1;
         }
         
         /// <summary>
@@ -38,7 +42,7 @@ namespace sqlcicd.Configuration
         /// <returns>If sub command is provided</returns>
         private static bool subCommandCheck()
         {
-            return Args.Length >= 2;
+            return Args?.Length >= 2;
         }
         
         /// <summary>
@@ -63,12 +67,7 @@ namespace sqlcicd.Configuration
         /// <exception cref="ArgumentNullException"></exception>
         public static string GetCmd()
         {
-            if (!argsCmdCheck())
-            {
-                throw new ArgumentNullException("Command is not provided.");
-            }
-            
-            return Args[0];
+            return !argsCmdCheck() ? DEFAULT_CMD : Args[0];
         }
 
         /// <summary>

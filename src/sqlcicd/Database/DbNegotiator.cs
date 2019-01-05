@@ -1,17 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using sqlcicd.Database.Entity;
 using Dapper;
 using System.Threading.Tasks;
 using System.Transactions;
-using Microsoft.SqlServer.Management.SqlParser.SqlCodeDom;
 using sqlcicd.Exceptions;
 
 namespace sqlcicd.Database
 {
-    public class DbNegotiator : IDbNegotiator // TODO: implicate
+    public class DbNegotiator : IDbNegotiator
     {
         private readonly IDbConnection _dbConnection;
 
