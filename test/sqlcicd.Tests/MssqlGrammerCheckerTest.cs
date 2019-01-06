@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using sqlcicd.Syntax;
 
@@ -28,6 +29,15 @@ namespace sqlcicd.Tests
 
             Assert.IsFalse(result);
             Assert.AreNotEqual(string.Empty, errMsg);
+        }
+
+        [Test]
+        public void Check_MultipleErrors_AggregatesErrorsIntoAString()
+        {
+            var result = checker.Check("SEECT * FROM TB1;\n UPDATE TB2 S * FROM TB2;", out string errMsg);
+
+            Assert.IsFalse(result);
+            StringAssert.Contains("\n", errMsg);
         }
     }
 }
