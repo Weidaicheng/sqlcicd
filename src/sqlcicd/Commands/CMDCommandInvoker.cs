@@ -15,6 +15,11 @@ namespace sqlcicd.Commands
         public CMDCommandInvoker(ICommand command)
         {
             _command = command;
+
+            if (_command is ILogEvent log)
+            {
+                log.Log += logPrinter;
+            }
         }
 
         /// <summary>
@@ -28,6 +33,15 @@ namespace sqlcicd.Commands
         }
 
         /// <summary>
+        /// Print log
+        /// </summary>
+        /// <param name="log"></param>
+        private void logPrinter(string log)
+        {
+            Console.WriteLine(log);
+        }
+
+        /// <summary>
         /// Execute command
         /// </summary>
         /// <returns><see cref="ExecutionResult" /></returns>
@@ -36,7 +50,7 @@ namespace sqlcicd.Commands
             try
             {
                 var result = await _command.Execute();
-                
+
                 if (!result.Success)
                 {
                     printError(result.ErrorMessage);
