@@ -10,23 +10,23 @@ namespace sqlcicd.Database
     /// </summary>
     public abstract class DbNegotiator
     {
-        private readonly IDbConnection _dbConnection;
+        protected readonly IDbConnection DbConnection;
 
         protected DbNegotiator(IDbConnection dbConnection)
         {
-            _dbConnection = dbConnection;
+            DbConnection = dbConnection;
         }
         
         public virtual async Task Execute(string sqlScript)
         {
-            await _dbConnection.ExecuteAsync(sqlScript);
+            await DbConnection.ExecuteAsync(sqlScript);
         }
 
         public abstract Task<bool> IsVersionTableExists();
 
         public virtual async Task CreateVersionTable()
         {
-            await _dbConnection.ExecuteAsync($@"CREATE TABLE {nameof(SqlVersion)}
+            await DbConnection.ExecuteAsync($@"CREATE TABLE {nameof(SqlVersion)}
                 (
                   {nameof(SqlVersion.Id)}              INT IDENTITY (1, 1) PRIMARY KEY,
                   {nameof(SqlVersion.RepositoryType)}  INT         NOT NULL,
@@ -44,7 +44,7 @@ namespace sqlcicd.Database
 
         public virtual async Task<SqlVersion> GetLatestSqlVersion()
         {
-            return await _dbConnection.QueryFirstOrDefaultAsync<SqlVersion>($@"SELECT 
+            return await DbConnection.QueryFirstOrDefaultAsync<SqlVersion>($@"SELECT 
                 {nameof(SqlVersion.Id)}, 
                 {nameof(SqlVersion.RepositoryType)},
                 {nameof(SqlVersion.Version)},
@@ -60,13 +60,13 @@ namespace sqlcicd.Database
 
         public virtual async Task SetAllNonLatest()
         {
-            await _dbConnection.ExecuteAsync($@"UPDATE {nameof(SqlVersion)} 
+            await DbConnection.ExecuteAsync($@"UPDATE {nameof(SqlVersion)} 
                     SET {nameof(SqlVersion.IsLatest)} = 0;");
         }
 
         public virtual async Task InsertSqlVersion(SqlVersion sv)
         {
-            await _dbConnection.ExecuteAsync($@"INSERT INTO {nameof(SqlVersion)} (
+            await DbConnection.ExecuteAsync($@"INSERT INTO {nameof(SqlVersion)} (
                 {nameof(SqlVersion.RepositoryType)},
                 {nameof(SqlVersion.Version)},
                 {nameof(SqlVersion.DeliveryTime)},

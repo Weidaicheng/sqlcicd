@@ -10,18 +10,15 @@ namespace sqlcicd.Database
 {
     public class MssqlNegotiator : DbNegotiator
     {
-        private readonly IDbConnection _dbConnection;
-
         public MssqlNegotiator(IDbConnection dbConnection)
             : base(dbConnection)
         {
-            _dbConnection = dbConnection;
         }
 
         public override async Task<bool> IsVersionTableExists()
         {
             var tableExists =
-                await _dbConnection.QueryFirstOrDefaultAsync<string>($"SELECT object_id('{nameof(SqlVersion)}')");
+                await DbConnection.QueryFirstOrDefaultAsync<string>($"SELECT object_id('{nameof(SqlVersion)}')");
             return !string.IsNullOrEmpty(tableExists);
         }
         
