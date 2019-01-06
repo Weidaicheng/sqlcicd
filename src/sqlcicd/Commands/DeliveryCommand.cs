@@ -23,7 +23,7 @@ namespace sqlcicd.Commands
     public class DeliveryCommand : ICommand
     {
         private readonly IRepository _repository;
-        private readonly IDbNegotiator _dbNegotiator;
+        private readonly DbNegotiator _dbNegotiator;
         private readonly ISqlSelector _sqlSelector;
         private readonly IGrammarChecker _grammarChecker;
         private readonly IFileReader _fileReader;
@@ -32,7 +32,7 @@ namespace sqlcicd.Commands
         private readonly BaseConfiguration _baseConfiguration;
 
         public DeliveryCommand(IRepository repository,
-            IDbNegotiator dbNegotiator,
+            DbNegotiator dbNegotiator,
             ISqlSelector sqlSelector,
             IGrammarChecker grammarChecker,
             IFileReader fileReader,
@@ -87,7 +87,7 @@ namespace sqlcicd.Commands
 
                 if (!scripts.Any())
                 {
-                    goto goto_end;
+                    goto endCommand;
                 }
 
                 using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -102,14 +102,11 @@ namespace sqlcicd.Commands
                     var endTime = TimeUtility.Now;
 
                     // insert delivery record
-
-
                     // 1.get the latest version
                     var preVersion = await _dbNegotiator.GetLatestSqlVersion();
-
-                    // 3.update all other records.IsLatest = false
+                    // 2.update all other records.IsLatest = false
                     await _dbNegotiator.SetAllNonLatest();
-                    // 4.insert sv
+                    // 3.insert sv
                     var sv = new SqlVersion(_baseConfiguration.RepositoryType, newest.Version,
                         (endTime - beginTime).TotalMilliseconds) {IsLatest = true, LastVersion = preVersion?.Id};
                     await _dbNegotiator.InsertSqlVersion(sv);
@@ -117,7 +114,7 @@ namespace sqlcicd.Commands
                     trans.Complete();
                 }
 
-                goto_end:
+                endCommand:
                 return new ExecutionResult()
                 {
                     Success = true,

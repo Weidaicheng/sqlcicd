@@ -20,14 +20,14 @@ namespace sqlcicd.Commands
     public class IntegrateCommand : ICommand
     {
         private readonly IRepository _repository;
-        private readonly IDbNegotiator _dbNegotiator;
+        private readonly DbNegotiator _dbNegotiator;
         private readonly ISqlSelector _sqlSelector;
         private readonly IGrammarChecker _grammarChecker;
         private readonly IFileReader _fileReader;
         private readonly SqlIgnoreConfiguration _sqlIgnoreConfiguration;
 
         public IntegrateCommand(IRepository repository,
-            IDbNegotiator dbNegotiator,
+            DbNegotiator dbNegotiator,
             ISqlSelector sqlSelector,
             IGrammarChecker grammarChecker,
             IFileReader fileReader,
