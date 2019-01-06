@@ -102,19 +102,16 @@ namespace sqlcicd.Commands
                     var endTime = TimeUtility.Now;
 
                     // insert delivery record
-                    var sv = new SqlVersion(_baseConfiguration.RepositoryType, newest.Version,
-                        0); // TODO: change 0 to a real number
+
 
                     // 1.get the latest version
                     var preVersion = await _dbNegotiator.GetLatestSqlVersion();
-                    // 2.set sv.LastVersion = lastV.Id, sv.IsLatest = true
-                    sv.IsLatest = true;
-                    sv.LastVersion = preVersion?.Id;
+
                     // 3.update all other records.IsLatest = false
                     await _dbNegotiator.SetAllNonLatest();
                     // 4.insert sv
-                    // set transaction cost
-                    sv.TransactionCost = (endTime - beginTime).TotalMilliseconds;
+                    var sv = new SqlVersion(_baseConfiguration.RepositoryType, newest.Version,
+                        (endTime - beginTime).TotalMilliseconds) {IsLatest = true, LastVersion = preVersion?.Id};
                     await _dbNegotiator.InsertSqlVersion(sv);
 
                     trans.Complete();

@@ -16,7 +16,7 @@ namespace sqlcicd.Database.Entity
         public SqlVersion(
             RepositoryType repositoryType,
             string version,
-            int transactionCost
+            double transactionCost
         )
         {
             RepositoryType = repositoryType;
