@@ -7,7 +7,7 @@ namespace sqlcicd.DI
     {
         public override void Inject()
         {
-            var command = Singletons.GetCmd();
+            var command = Singletons.Command.ToString();
 
             CommandInjectorEnum
                 .GetInjector(command)

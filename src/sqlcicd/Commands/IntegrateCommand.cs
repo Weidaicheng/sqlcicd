@@ -7,7 +7,6 @@ using sqlcicd.Configuration;
 using sqlcicd.Configuration.Entity;
 using sqlcicd.Database;
 using sqlcicd.Database.Entity;
-using sqlcicd.Exceptions;
 using sqlcicd.Files;
 using sqlcicd.Repository;
 using sqlcicd.Repository.Entity;
@@ -51,7 +50,7 @@ namespace sqlcicd.Commands
         {
             log($"SQL Continuous Integrate start");
             
-            var path = Singletons.GetPath();
+            var path = Singletons.Command.Path;
             log($"Path: {path}");
 
             // 1. get newest version from repository
@@ -86,7 +85,7 @@ namespace sqlcicd.Commands
             {
                 if (!file.ToLower().EndsWith(".sql")) continue;
                 log($"check grammar for {file}");
-                var script = await _fileReader.GetContentAsync($"{Singletons.GetPath()}/{file}");
+                var script = await _fileReader.GetContentAsync($"{Singletons.Command.Path}/{file}");
                 if (_grammarChecker.Check(script, out var errMsg)) continue;
                 log($"error(s) found in {file}");
                 errors.Add(errMsg);

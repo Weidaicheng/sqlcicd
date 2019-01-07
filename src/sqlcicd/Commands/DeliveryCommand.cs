@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Transactions;
 using sqlcicd.Commands.Entity;
@@ -54,7 +52,7 @@ namespace sqlcicd.Commands
         {
             log($"SQL Continuous Delivery start");
             
-            var path = Singletons.GetPath();
+            var path = Singletons.Command.Path;
             log($"Path: {path}");
 
             // 1. get newest version from repository
@@ -91,7 +89,7 @@ namespace sqlcicd.Commands
             {
                 var scripts = await Task.WhenAll(changedFiles
                     .Where(file => file.ToLower().EndsWith(".sql"))
-                    .Select(async file => await _fileReader.GetContentAsync($"{Singletons.GetPath()}/{file}"))
+                    .Select(async file => await _fileReader.GetContentAsync($"{Singletons.Command.Path}/{file}"))
                     .ToList());
 
                 if (!scripts.Any())

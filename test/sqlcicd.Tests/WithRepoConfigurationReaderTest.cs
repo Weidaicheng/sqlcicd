@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
+using sqlcicd.Commands.Entity;
 using sqlcicd.Configuration;
 using sqlcicd.Configuration.Entity;
 using sqlcicd.Database.Entity;
@@ -19,9 +20,10 @@ namespace sqlcicd.Tests
         [Test]
         public async Task GetSqlIgnoreConfiguration_FileNotExists_ReturnsEmptyList()
         {
-            Singletons.Args = new List<string>()
+            Singletons.Command = new Command()
             {
-            }.ToArray();
+                Path = string.Empty
+            };
 
             var fileReader = Substitute.For<IFileReader>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(false);
@@ -35,9 +37,10 @@ namespace sqlcicd.Tests
         [Test]
         public async Task GetSqlIgnoreConfiguration_ReadConfiguration_ReturnsSame()
         {
-            Singletons.Args = new List<string>()
+            Singletons.Command = new Command()
             {
-            }.ToArray();
+                Path = string.Empty
+            };
 
             var fileReader = Substitute.For<IFileReader>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
@@ -57,9 +60,10 @@ namespace sqlcicd.Tests
         [Test]
         public async Task GetSqlOrderConfiguration_FileNotExists_ReturnsEmptyList()
         {
-            Singletons.Args = new List<string>()
+            Singletons.Command = new Command()
             {
-            }.ToArray();
+                Path = string.Empty
+            };
 
             var fileReader = Substitute.For<IFileReader>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(false);
@@ -73,9 +77,10 @@ namespace sqlcicd.Tests
         [Test]
         public async Task GetSqlOrderConfiguration_ReadConfiguration_ReturnsSame()
         {
-            Singletons.Args = new List<string>()
+            Singletons.Command = new Command()
             {
-            }.ToArray();
+                Path = string.Empty
+            };
 
             var fileReader = Substitute.For<IFileReader>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
@@ -95,9 +100,10 @@ namespace sqlcicd.Tests
         [Test]
         public void GetBaseConfiguration_FileNotExists_ThrowsException()
         {
-            Singletons.Args = new List<string>()
+            Singletons.Command = new Command()
             {
-            }.ToArray();
+                Path = string.Empty
+            };
 
             var fileReader = Substitute.For<IFileReader>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(false);
@@ -112,9 +118,10 @@ namespace sqlcicd.Tests
         [Test]
         public void GetBaseConfiguration_DbTypeNotConfigured_ThrowsException()
         {
-            Singletons.Args = new List<string>()
+            Singletons.Command = new Command()
             {
-            }.ToArray();
+                Path = string.Empty
+            };
 
             var fileReader = Substitute.For<IFileReader>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
@@ -135,9 +142,10 @@ namespace sqlcicd.Tests
         [Test]
         public void GetBaseConfiguration_RepositoryTypeNotConfigured_ThrowsException()
         {
-            Singletons.Args = new List<string>()
+            Singletons.Command = new Command()
             {
-            }.ToArray();
+                Path = string.Empty
+            };
 
             var fileReader = Substitute.For<IFileReader>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
@@ -158,9 +166,10 @@ namespace sqlcicd.Tests
         [Test]
         public void GetBaseConfiguration_ConnectionStringNotConfigured_ThrowsException()
         {
-            Singletons.Args = new List<string>()
+            Singletons.Command = new Command()
             {
-            }.ToArray();
+                Path = string.Empty
+            };
 
             var fileReader = Substitute.For<IFileReader>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
@@ -181,9 +190,10 @@ namespace sqlcicd.Tests
         [Test]
         public async Task GetBaseConfiguration_AllConfigured_ReturnsSame()
         {
-            Singletons.Args = new List<string>()
+            Singletons.Command = new Command()
             {
-            }.ToArray();
+                Path = string.Empty
+            };
 
             var fileReader = Substitute.For<IFileReader>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);

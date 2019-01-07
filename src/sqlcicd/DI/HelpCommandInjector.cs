@@ -15,7 +15,7 @@ namespace sqlcicd.DI
         public void Inject(IServiceCollection services)
         {
             // sub help
-            switch (Singletons.GetSubCmd())
+            switch (Singletons.Command.MainCommand)
             {
                 case CommandEnum.HELP_CMD:
                 case CommandEnum.HELP_CMD_SHORT:
@@ -31,7 +31,7 @@ namespace sqlcicd.DI
                     break;
                 default:
                     throw new UnSupportedCommandException(
-                        $"Command {Singletons.GetSubCmd()} is not supported, please try again");
+                        $"Command {Singletons.Command.MainCommand} is not supported, please try again");
             }
 
             // add command

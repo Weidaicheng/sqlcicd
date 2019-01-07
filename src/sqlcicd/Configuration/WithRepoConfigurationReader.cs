@@ -47,7 +47,7 @@ namespace sqlcicd.Configuration
 
         public async Task<SqlIgnoreConfiguration> GetSqlIgnoreConfiguration()
         {
-            var path = $"{Singletons.GetPath()}/{SQL_IGNORE_CONFIG}";
+            var path = $"{Singletons.Command.Path}/{SQL_IGNORE_CONFIG}";
             if (!_fileReader.FileExistsCheck(path))
             {
                 return new SqlIgnoreConfiguration()
@@ -66,7 +66,7 @@ namespace sqlcicd.Configuration
 
         public async Task<SqlOrderConfiguration> GetSqlOrderConfiguration()
         {
-            var path = $"{Singletons.GetPath()}/{SQL_ORDER_CONFIG}";
+            var path = $"{Singletons.Command.Path}/{SQL_ORDER_CONFIG}";
             if (!_fileReader.FileExistsCheck(path))
             {
                 return new SqlOrderConfiguration()
@@ -85,7 +85,7 @@ namespace sqlcicd.Configuration
 
         public async Task<BaseConfiguration> GetBaseConfiguration()
         {
-            var path = $"{Singletons.GetPath()}/{BASE_CONFIG}";
+            var path = $"{Singletons.Command.Path}/{BASE_CONFIG}";
             if (!_fileReader.FileExistsCheck(path))
             {
                 throw new FileNotFoundException($"{path} hasn't found.");
