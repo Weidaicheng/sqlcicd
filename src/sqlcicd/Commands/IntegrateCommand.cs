@@ -26,13 +26,15 @@ namespace sqlcicd.Commands
         private readonly IGrammarChecker _grammarChecker;
         private readonly IFileReader _fileReader;
         private readonly SqlIgnoreConfiguration _sqlIgnoreConfiguration;
+        private readonly Command _command;
 
         public IntegrateCommand(IRepository repository,
             DbNegotiator dbNegotiator,
             ISqlSelector sqlSelector,
             IGrammarChecker grammarChecker,
             IFileReader fileReader,
-            SqlIgnoreConfiguration sqlIgnoreConfiguration)
+            SqlIgnoreConfiguration sqlIgnoreConfiguration,
+            Command command)
         {
             _repository = repository;
             _dbNegotiator = dbNegotiator;
@@ -40,6 +42,7 @@ namespace sqlcicd.Commands
             _grammarChecker = grammarChecker;
             _fileReader = fileReader;
             _sqlIgnoreConfiguration = sqlIgnoreConfiguration;
+            _command = command;
         }
 
         /// <summary>
@@ -50,7 +53,7 @@ namespace sqlcicd.Commands
         {
             log($"SQL Continuous Integrate start");
             
-            var path = Singletons.Command.Path;
+            var path = _command.Path;
             log($"Path: {path}");
 
             // 1. get newest version from repository
@@ -85,7 +88,7 @@ namespace sqlcicd.Commands
             {
                 if (!file.ToLower().EndsWith(".sql")) continue;
                 log($"check grammar for {file}");
-                var script = await _fileReader.GetContentAsync($"{Singletons.Command.Path}/{file}");
+                var script = await _fileReader.GetContentAsync($"{_command.Path}/{file}");
                 if (_grammarChecker.Check(script, out var errMsg)) continue;
                 log($"error(s) found in {file}");
                 errors.Add(errMsg);
@@ -108,7 +111,7 @@ namespace sqlcicd.Commands
         /// <param name="log"></param>
         private void log(string log)
         {
-            Log.Invoke($"UTC {TimeUtility.Now.ToLongTimeString()} | {log}");
+            Log?.Invoke($"UTC {TimeUtility.Now.ToLongTimeString()} | {log}");
         }
     }
 }

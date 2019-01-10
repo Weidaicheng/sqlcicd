@@ -64,7 +64,7 @@ namespace sqlcicd.DI
         {
             if (!commands.ContainsKey(command))
             {
-                throw new UnSupportedCommandException($"Command '{Singletons.OriginalCommand}' is not supported");
+                throw new UnSupportedCommandException($"Command is not supported");
             }
 
             return commands[command];

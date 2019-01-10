@@ -18,7 +18,7 @@ namespace sqlcicd.DI
     /// </summary>
     public class DeliveryCommandInjector : ICommandInjector
     {
-        public void Inject(IServiceCollection services)
+        public void Inject(IServiceCollection services, Command command)
         {
             services.AddTransient<IFileReader, FileReader>();
             services.AddTransient<ISqlConfigurationReader, WithRepoConfigurationReader>();

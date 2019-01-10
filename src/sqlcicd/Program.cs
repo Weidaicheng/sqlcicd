@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DependencyInjection.InConsole;
 using Microsoft.Extensions.DependencyInjection;
 using sqlcicd.Commands;
+using sqlcicd.Commands.Entity;
 using sqlcicd.Configuration;
 
 namespace sqlcicd
@@ -14,14 +15,8 @@ namespace sqlcicd
         {
             try
             {
-                // save original command
-                Singletons.SetOriginalCommand(args);
-                // save command as singleton
-                var cmdFactory = new CommandFactory();
-                Singletons.Command = cmdFactory.GenerateCommand(args);
-
                 // Startup
-                var provider = Startup.ConfigureServices();
+                var provider = Startup.ConfigureServices(args);
 
                 // execute
                 var command = provider.GetRequiredService<ICommand>();

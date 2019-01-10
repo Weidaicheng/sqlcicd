@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using sqlcicd.Commands.Entity;
 
 namespace sqlcicd.DI
 {
@@ -11,6 +12,8 @@ namespace sqlcicd.DI
         /// Inject
         /// </summary>
         /// <param name="services">services</param>
-        void Inject(IServiceCollection services);
+        /// <param name="command"></param>
+        void Inject(IServiceCollection services,
+            Command command); // TODO: remove Command argument, after the property injection is supported.
     }
 }

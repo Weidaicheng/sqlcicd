@@ -20,14 +20,10 @@ namespace sqlcicd.Tests
         [Test]
         public async Task GetSqlIgnoreConfiguration_FileNotExists_ReturnsEmptyList()
         {
-            Singletons.Command = new Command()
-            {
-                Path = string.Empty
-            };
-
             var fileReader = Substitute.For<IFileReader>();
+            var command = Substitute.For<Command>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(false);
-            var confReader = new WithRepoConfigurationReader(fileReader);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
 
             var result = await confReader.GetSqlIgnoreConfiguration();
 
@@ -37,12 +33,8 @@ namespace sqlcicd.Tests
         [Test]
         public async Task GetSqlIgnoreConfiguration_ReadConfiguration_ReturnsSame()
         {
-            Singletons.Command = new Command()
-            {
-                Path = string.Empty
-            };
-
             var fileReader = Substitute.For<IFileReader>();
+            var command = Substitute.For<Command>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
             var lines = new List<string>()
             {
@@ -50,7 +42,7 @@ namespace sqlcicd.Tests
                 "line 2"
             };
             fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
-            var confReader = new WithRepoConfigurationReader(fileReader);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
 
             var result = await confReader.GetSqlIgnoreConfiguration();
 
@@ -60,14 +52,10 @@ namespace sqlcicd.Tests
         [Test]
         public async Task GetSqlOrderConfiguration_FileNotExists_ReturnsEmptyList()
         {
-            Singletons.Command = new Command()
-            {
-                Path = string.Empty
-            };
-
             var fileReader = Substitute.For<IFileReader>();
+            var command = Substitute.For<Command>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(false);
-            var confReader = new WithRepoConfigurationReader(fileReader);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
 
             var result = await confReader.GetSqlOrderConfiguration();
 
@@ -77,12 +65,8 @@ namespace sqlcicd.Tests
         [Test]
         public async Task GetSqlOrderConfiguration_ReadConfiguration_ReturnsSame()
         {
-            Singletons.Command = new Command()
-            {
-                Path = string.Empty
-            };
-
             var fileReader = Substitute.For<IFileReader>();
+            var command = Substitute.For<Command>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
             var lines = new List<string>()
             {
@@ -90,7 +74,7 @@ namespace sqlcicd.Tests
                 "line 2"
             };
             fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
-            var confReader = new WithRepoConfigurationReader(fileReader);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
 
             var result = await confReader.GetSqlOrderConfiguration();
 
@@ -100,14 +84,10 @@ namespace sqlcicd.Tests
         [Test]
         public void GetBaseConfiguration_FileNotExists_ThrowsException()
         {
-            Singletons.Command = new Command()
-            {
-                Path = string.Empty
-            };
-
             var fileReader = Substitute.For<IFileReader>();
+            var command = Substitute.For<Command>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(false);
-            var confReader = new WithRepoConfigurationReader(fileReader);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
 
             Assert.Catch<FileNotFoundException>(() =>
             {
@@ -118,12 +98,8 @@ namespace sqlcicd.Tests
         [Test]
         public void GetBaseConfiguration_DbTypeNotConfigured_ThrowsException()
         {
-            Singletons.Command = new Command()
-            {
-                Path = string.Empty
-            };
-
             var fileReader = Substitute.For<IFileReader>();
+            var command = Substitute.For<Command>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
             var lines = new List<string>()
             {
@@ -131,7 +107,7 @@ namespace sqlcicd.Tests
                 $"{WithRepoConfigurationReader.CONNECTION_STRING_KEY}:default"
             };
             fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
-            var confReader = new WithRepoConfigurationReader(fileReader);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
 
             Assert.Catch<DbTypeNotConfiguredException>(() =>
             {
@@ -142,12 +118,8 @@ namespace sqlcicd.Tests
         [Test]
         public void GetBaseConfiguration_RepositoryTypeNotConfigured_ThrowsException()
         {
-            Singletons.Command = new Command()
-            {
-                Path = string.Empty
-            };
-
             var fileReader = Substitute.For<IFileReader>();
+            var command = Substitute.For<Command>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
             var lines = new List<string>()
             {
@@ -155,7 +127,7 @@ namespace sqlcicd.Tests
                 $"{WithRepoConfigurationReader.CONNECTION_STRING_KEY}:default"
             };
             fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
-            var confReader = new WithRepoConfigurationReader(fileReader);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
 
             Assert.Catch<RepositoryTypeNotConfiguredException>(() =>
             {
@@ -166,12 +138,8 @@ namespace sqlcicd.Tests
         [Test]
         public void GetBaseConfiguration_ConnectionStringNotConfigured_ThrowsException()
         {
-            Singletons.Command = new Command()
-            {
-                Path = string.Empty
-            };
-
             var fileReader = Substitute.For<IFileReader>();
+            var command = Substitute.For<Command>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
             var lines = new List<string>()
             {
@@ -179,7 +147,7 @@ namespace sqlcicd.Tests
                 $"{nameof(RepositoryType)}:Git"
             };
             fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
-            var confReader = new WithRepoConfigurationReader(fileReader);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
 
             Assert.Catch<ConnectionStringNotProvidedException>(() =>
             {
@@ -190,12 +158,8 @@ namespace sqlcicd.Tests
         [Test]
         public async Task GetBaseConfiguration_AllConfigured_ReturnsSame()
         {
-            Singletons.Command = new Command()
-            {
-                Path = string.Empty
-            };
-
             var fileReader = Substitute.For<IFileReader>();
+            var command = Substitute.For<Command>();
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
             var lines = new List<string>()
             {
@@ -204,7 +168,7 @@ namespace sqlcicd.Tests
                 $"{WithRepoConfigurationReader.CONNECTION_STRING_KEY}:default"
             };
             fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
-            var confReader = new WithRepoConfigurationReader(fileReader);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
 
             var result = await confReader.GetBaseConfiguration();
 

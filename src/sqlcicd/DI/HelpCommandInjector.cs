@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using sqlcicd.Commands;
 using sqlcicd.Commands.Entity;
-using sqlcicd.Configuration;
 using sqlcicd.Exceptions;
 using sqlcicd.Help;
 
@@ -12,10 +11,10 @@ namespace sqlcicd.DI
     /// </summary>
     public class HelpCommandInjector : ICommandInjector
     {
-        public void Inject(IServiceCollection services)
+        public void Inject(IServiceCollection services, Command command)
         {
             // sub help
-            switch (Singletons.Command.MainCommand)
+            switch (command.MainCommand)
             {
                 case CommandEnum.HELP_CMD:
                 case CommandEnum.HELP_CMD_SHORT:
@@ -31,7 +30,7 @@ namespace sqlcicd.DI
                     break;
                 default:
                     throw new UnSupportedCommandException(
-                        $"Command {Singletons.Command.MainCommand} is not supported, please try again");
+                        $"Command {command.MainCommand} is not supported, please try again");
             }
 
             // add command

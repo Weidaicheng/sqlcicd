@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using sqlcicd.Commands.Entity;
 using sqlcicd.Configuration.Entity;
 using sqlcicd.Database.Entity;
 using sqlcicd.Exceptions;
@@ -39,15 +40,17 @@ namespace sqlcicd.Configuration
         #endregion
 
         private readonly IFileReader _fileReader;
+        private readonly Command _command;
 
-        public WithRepoConfigurationReader(IFileReader fileReader)
+        public WithRepoConfigurationReader(IFileReader fileReader, Command command)
         {
             _fileReader = fileReader;
+            _command = command;
         }
 
         public async Task<SqlIgnoreConfiguration> GetSqlIgnoreConfiguration()
         {
-            var path = $"{Singletons.Command.Path}/{SQL_IGNORE_CONFIG}";
+            var path = $"{_command.Path}/{SQL_IGNORE_CONFIG}";
             if (!_fileReader.FileExistsCheck(path))
             {
                 return new SqlIgnoreConfiguration()
@@ -66,7 +69,7 @@ namespace sqlcicd.Configuration
 
         public async Task<SqlOrderConfiguration> GetSqlOrderConfiguration()
         {
-            var path = $"{Singletons.Command.Path}/{SQL_ORDER_CONFIG}";
+            var path = $"{_command.Path}/{SQL_ORDER_CONFIG}";
             if (!_fileReader.FileExistsCheck(path))
             {
                 return new SqlOrderConfiguration()
@@ -85,7 +88,7 @@ namespace sqlcicd.Configuration
 
         public async Task<BaseConfiguration> GetBaseConfiguration()
         {
-            var path = $"{Singletons.Command.Path}/{BASE_CONFIG}";
+            var path = $"{_command.Path}/{BASE_CONFIG}";
             if (!_fileReader.FileExistsCheck(path))
             {
                 throw new FileNotFoundException($"{path} hasn't found.");
