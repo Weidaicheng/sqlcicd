@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using sqlcicd.Commands.Entity;
-using sqlcicd.Configuration;
 using sqlcicd.Exceptions;
 
 namespace sqlcicd.DI
@@ -53,6 +52,11 @@ namespace sqlcicd.DI
             // sqlcicd.exe -d path
             commands.Add($"{CommandEnum.DELIVERY_CMD},", new DeliveryCommandInjector());
             commands.Add($"{CommandEnum.DELIVERY_CMD_SHORT},", new DeliveryCommandInjector());
+            // * Version
+            // sqlcicd.exe --version
+            // sqlcicd.exe -v
+            commands.Add($"{CommandEnum.VERSION_CMD},{CommandEnum.HELP_CMD}", new HelpCommandInjector());
+            commands.Add($"{CommandEnum.VERSION_CMD_SHORT},{CommandEnum.HELP_CMD}", new HelpCommandInjector());
         }
 
         /// <summary>

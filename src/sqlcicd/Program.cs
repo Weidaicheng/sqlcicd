@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using DependencyInjection.InConsole;
 using Microsoft.Extensions.DependencyInjection;
 using sqlcicd.Commands;
-using sqlcicd.Commands.Entity;
-using sqlcicd.Configuration;
 
 namespace sqlcicd
 {

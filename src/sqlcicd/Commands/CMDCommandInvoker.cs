@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using sqlcicd.Commands.Entity;
-using sqlcicd.Configuration;
 
 namespace sqlcicd.Commands
 {

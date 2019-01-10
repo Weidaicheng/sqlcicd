@@ -1,4 +1,3 @@
-using Microsoft.SqlServer.Management.SqlParser.SqlCodeDom;
 using NUnit.Framework;
 using sqlcicd.Commands;
 using sqlcicd.Commands.Entity;

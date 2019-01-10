@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using sqlcicd.Exceptions;
 
 namespace sqlcicd.Files
 {

@@ -1,10 +1,7 @@
-using System.Collections.Generic;
 using System.Data;
 using sqlcicd.Database.Entity;
 using Dapper;
 using System.Threading.Tasks;
-using System.Transactions;
-using sqlcicd.Exceptions;
 
 namespace sqlcicd.Database
 {

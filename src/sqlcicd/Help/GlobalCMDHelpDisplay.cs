@@ -19,6 +19,8 @@ namespace sqlcicd.Help
                 $"\t{CommandEnum.DELIVERY_CMD}|{CommandEnum.DELIVERY_CMD_SHORT}\t{CommandEnum.CommandDescription[CommandEnum.DELIVERY_CMD]}");
             Console.WriteLine(
                 $"\t{CommandEnum.HELP_CMD}|{CommandEnum.HELP_CMD_SHORT}\t{CommandEnum.CommandDescription[CommandEnum.HELP_CMD]}");
+            Console.WriteLine(
+                $"\t{CommandEnum.VERSION_CMD}|{CommandEnum.VERSION_CMD_SHORT}\t{CommandEnum.CommandDescription[CommandEnum.VERSION_CMD]}");
         }
     }
 }

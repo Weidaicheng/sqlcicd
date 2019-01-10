@@ -1,4 +1,3 @@
-using System.Linq;
 using DependencyInjection.InConsole.Injec.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using sqlcicd.Commands;

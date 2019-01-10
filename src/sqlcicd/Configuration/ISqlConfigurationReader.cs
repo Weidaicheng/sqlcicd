@@ -1,8 +1,5 @@
-using System.Data;
 using System.Threading.Tasks;
 using sqlcicd.Configuration.Entity;
-using sqlcicd.Repository;
-using sqlcicd.Repository.Entity;
 
 namespace sqlcicd.Configuration
 {

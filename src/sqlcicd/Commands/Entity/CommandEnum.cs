@@ -18,6 +18,10 @@ namespace sqlcicd.Commands.Entity
         // help
         public const string HELP_CMD = "--help";
         public const string HELP_CMD_SHORT = "-h";
+        
+        // version
+        public const string VERSION_CMD = "--version";
+        public const string VERSION_CMD_SHORT = "-v";
 
         /// <summary>
         /// Command descriptions
@@ -29,7 +33,9 @@ namespace sqlcicd.Commands.Entity
             {DELIVERY_CMD, "Continuous Delivery"},
             {DELIVERY_CMD_SHORT, "Continuous Delivery"},
             {HELP_CMD, "Display help"},
-            {HELP_CMD_SHORT, "Display help"}
+            {HELP_CMD_SHORT, "Display help"},
+            {VERSION_CMD, "Display version"},
+            {VERSION_CMD_SHORT, "Display Version"}
         };
     }
 }

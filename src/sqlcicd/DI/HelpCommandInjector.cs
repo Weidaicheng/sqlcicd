@@ -28,6 +28,10 @@ namespace sqlcicd.DI
                 case CommandEnum.DELIVERY_CMD_SHORT:
                     services.AddTransient<ICMDHelpDisplay, DeliveryCMDHelpDisplay>();
                     break;
+                case CommandEnum.VERSION_CMD:
+                case CommandEnum.VERSION_CMD_SHORT:
+                    services.AddTransient<ICMDHelpDisplay, VersionCMDHelpDisplay>();
+                    break;
                 default:
                     throw new UnSupportedCommandException(
                         $"Command {command.MainCommand} is not supported, please try again");
