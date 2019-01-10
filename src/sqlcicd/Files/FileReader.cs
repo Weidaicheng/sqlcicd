@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace sqlcicd.Files
@@ -15,11 +16,22 @@ namespace sqlcicd.Files
             return File.Exists(path);
         }
 
-        /// <summary>
-        /// Get file content
-        /// </summary>
-        /// <param name="path">File path</param>
-        /// <returns>File content</returns>
+        public bool DirectoryExistsCheck(string path)
+        {
+            return Directory.Exists(path);
+        }
+
+        public async Task<IEnumerable<string>> GetFiles(string directoryPath)
+        {
+            if (string.IsNullOrEmpty(directoryPath))
+            {
+                throw new ArgumentNullException("Directory path is not provided.");
+            }
+
+            var directoryInfo = new DirectoryInfo(directoryPath);
+            return await Task.FromResult(directoryInfo.GetFiles().Select(f => f.Name).ToList());
+        }
+
         public async Task<string> GetContentAsync(string path)
         {
             if (string.IsNullOrEmpty(path))

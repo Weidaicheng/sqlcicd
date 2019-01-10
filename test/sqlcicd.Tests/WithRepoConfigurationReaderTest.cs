@@ -50,6 +50,65 @@ namespace sqlcicd.Tests
         }
 
         [Test]
+        public async Task GetSqlIgnoreConfiguration_DirectoryConfigured_ReturnsAllfiles()
+        {
+            var fileReader = Substitute.For<IFileReader>();
+            var command = Substitute.For<Command>();
+            fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
+            var lines = new List<string>()
+            {
+                "path"
+            };
+            var files = new List<string>()
+            {
+                "file 1",
+                "file 2"
+            };
+            fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
+            fileReader.DirectoryExistsCheck(Arg.Any<string>()).Returns(true);
+            fileReader.GetFiles(Arg.Any<string>()).Returns(files);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
+
+            var result = await confReader.GetSqlIgnoreConfiguration();
+
+            Assert.AreEqual(files, result.IgnoredFile);
+        }
+        
+        [Test]
+        public async Task GetSqlIgnoreConfiguration_DirectoryAndFileConfigured_ReturnsAllfiles()
+        {
+            var command = new Command()
+            {
+                Path = ""
+            };
+            var fileReader = Substitute.For<IFileReader>();
+            fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
+            var lines = new List<string>()
+            {
+                "path",
+                "file 3"
+            };
+            var files = new List<string>()
+            {
+                "file 1",
+                "file 2"
+            };
+            fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
+            fileReader.DirectoryExistsCheck($"{command.Path}/path").Returns(true);
+            fileReader.GetFiles($"{command.Path}/path").Returns(files);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
+
+            var result = await confReader.GetSqlIgnoreConfiguration();
+
+            Assert.AreEqual(new List<string>()
+            {
+                "file 1",
+                "file 2",
+                "file 3"
+            }, result.IgnoredFile);
+        }
+
+        [Test]
         public async Task GetSqlOrderConfiguration_FileNotExists_ReturnsEmptyList()
         {
             var fileReader = Substitute.For<IFileReader>();
@@ -79,6 +138,65 @@ namespace sqlcicd.Tests
             var result = await confReader.GetSqlOrderConfiguration();
 
             Assert.AreEqual(lines, result.FileOrder);
+        }
+        
+        [Test]
+        public async Task GetSqlOrderConfiguration_DirectoryConfigured_ReturnsAllfiles()
+        {
+            var fileReader = Substitute.For<IFileReader>();
+            var command = Substitute.For<Command>();
+            fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
+            var lines = new List<string>()
+            {
+                "path"
+            };
+            var files = new List<string>()
+            {
+                "file 1",
+                "file 2"
+            };
+            fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
+            fileReader.DirectoryExistsCheck(Arg.Any<string>()).Returns(true);
+            fileReader.GetFiles(Arg.Any<string>()).Returns(files);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
+
+            var result = await confReader.GetSqlOrderConfiguration();
+
+            Assert.AreEqual(files, result.FileOrder);
+        }
+        
+        [Test]
+        public async Task GetSqlOrderConfiguration_DirectoryAndFileConfigured_ReturnsAllfiles()
+        {
+            var command = new Command()
+            {
+                Path = ""
+            };
+            var fileReader = Substitute.For<IFileReader>();
+            fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
+            var lines = new List<string>()
+            {
+                "path",
+                "file 3"
+            };
+            var files = new List<string>()
+            {
+                "file 1",
+                "file 2"
+            };
+            fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
+            fileReader.DirectoryExistsCheck($"{command.Path}/path").Returns(true);
+            fileReader.GetFiles($"{command.Path}/path").Returns(files);
+            var confReader = new WithRepoConfigurationReader(fileReader, command);
+
+            var result = await confReader.GetSqlOrderConfiguration();
+
+            Assert.AreEqual(new List<string>()
+            {
+                "file 1",
+                "file 2",
+                "file 3"
+            }, result.FileOrder);
         }
 
         [Test]

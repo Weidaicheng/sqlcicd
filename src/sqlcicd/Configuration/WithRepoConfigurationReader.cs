@@ -60,10 +60,26 @@ namespace sqlcicd.Configuration
             }
 
             var lines = await _fileReader.GetLinesAsync(path);
+            var ignoredFiles = new List<string>();
 
+            foreach (var line in lines)
+            {
+                if (_fileReader.DirectoryExistsCheck($"{_command.Path}/{line}"))
+                {
+                    // is a directory
+                    var files = await _fileReader.GetFiles($"{_command.Path}/{line}");
+                    ignoredFiles.AddRange(files);
+                }
+                else
+                {
+                    // is a file
+                    ignoredFiles.Add(line);
+                }
+            }
+            
             return new SqlIgnoreConfiguration()
             {
-                IgnoredFile = lines
+                IgnoredFile = ignoredFiles
             };
         }
 
@@ -79,10 +95,26 @@ namespace sqlcicd.Configuration
             }
 
             var lines = await _fileReader.GetLinesAsync(path);
+            var fileOrder = new List<string>();
+
+            foreach (var line in lines)
+            {
+                if (_fileReader.DirectoryExistsCheck($"{_command.Path}/{line}"))
+                {
+                    // is a directory
+                    var files = await _fileReader.GetFiles($"{_command.Path}/{line}");
+                    fileOrder.AddRange(files);
+                }
+                else
+                {
+                    // is a file
+                    fileOrder.Add(line);
+                }
+            }
 
             return new SqlOrderConfiguration()
             {
-                FileOrder = lines
+                FileOrder = fileOrder
             };
         }
 
