@@ -27,6 +27,7 @@ namespace sqlcicd.Commands
         private readonly IFileReader _fileReader;
         private readonly SqlIgnoreConfiguration _sqlIgnoreConfiguration;
         private readonly Command _command;
+        private readonly IDbPrepare _dbPrepare;
 
         public IntegrateCommand(IRepository repository,
             DbNegotiator dbNegotiator,
@@ -34,7 +35,8 @@ namespace sqlcicd.Commands
             IGrammarChecker grammarChecker,
             IFileReader fileReader,
             SqlIgnoreConfiguration sqlIgnoreConfiguration,
-            Command command)
+            Command command,
+            IDbPrepare dbPrepare)
         {
             _repository = repository;
             _dbNegotiator = dbNegotiator;
@@ -43,6 +45,7 @@ namespace sqlcicd.Commands
             _fileReader = fileReader;
             _sqlIgnoreConfiguration = sqlIgnoreConfiguration;
             _command = command;
+            _dbPrepare = dbPrepare;
         }
 
         /// <summary>
@@ -61,14 +64,11 @@ namespace sqlcicd.Commands
             var newest = _repository.GetNewestCommit(path);
 
             // 2. get latest version from db
-            // check if table SqlVersion exists
-            if (!await _dbNegotiator.IsVersionTableExists())
-            {
-                log($"table {nameof(SqlVersion)} doesn't exist");
-                // create table
-                log($"create table {nameof(SqlVersion)}");
-                await _dbNegotiator.CreateVersionTable();
-            }
+            // database preparation
+            log($"database preparation start");
+            await _dbPrepare.Prepare();
+            log($"database preparation finish");
+            
             log($"get last version from database");
             var latestSqlVersion = await _dbNegotiator.GetLatestSqlVersion();
             var latest = RepositoryVersion.GetRepositoryVersion(latestSqlVersion);

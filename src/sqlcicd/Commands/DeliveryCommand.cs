@@ -27,6 +27,7 @@ namespace sqlcicd.Commands
         private readonly SqlOrderConfiguration _sqlOrderConfiguration;
         private readonly BaseConfiguration _baseConfiguration;
         private readonly Command _command;
+        private readonly IDbPrepare _dbPrepare;
 
         public DeliveryCommand(IRepository repository,
             DbNegotiator dbNegotiator,
@@ -35,7 +36,8 @@ namespace sqlcicd.Commands
             SqlIgnoreConfiguration sqlIgnoreConfiguration,
             SqlOrderConfiguration sqlOrderConfiguration,
             BaseConfiguration baseConfiguration,
-            Command command)
+            Command command,
+            IDbPrepare dbPrepare)
         {
             _repository = repository;
             _dbNegotiator = dbNegotiator;
@@ -45,6 +47,7 @@ namespace sqlcicd.Commands
             _sqlOrderConfiguration = sqlOrderConfiguration;
             _baseConfiguration = baseConfiguration;
             _command = command;
+            _dbPrepare = dbPrepare;
         }
 
         public async Task<ExecutionResult> Execute()
@@ -59,14 +62,10 @@ namespace sqlcicd.Commands
             var newest = _repository.GetNewestCommit(path);
 
             // 2. get latest version from db
-            // check if table SqlVersion exists
-            if (!await _dbNegotiator.IsVersionTableExists())
-            {
-                log($"table {nameof(SqlVersion)} doesn't exist");
-                // create table
-                log($"create table {nameof(SqlVersion)}");
-                await _dbNegotiator.CreateVersionTable();
-            }
+            // database preparation
+            log($"database preparation start");
+            await _dbPrepare.Prepare();
+            log($"database preparation finish");
 
             log($"get last version from database");
             var latestSqlVersion = await _dbNegotiator.GetLatestSqlVersion();

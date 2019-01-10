@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace sqlcicd.Database
 {
+    /// <inheritdoc />
     public class MssqlNegotiator : DbNegotiator
     {
         public MssqlNegotiator(IDbConnection dbConnection)
@@ -12,6 +13,7 @@ namespace sqlcicd.Database
         {
         }
 
+        /// <inheritdoc />
         public override async Task<bool> IsVersionTableExists()
         {
             var tableExists =

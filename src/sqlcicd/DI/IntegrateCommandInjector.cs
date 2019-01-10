@@ -6,6 +6,7 @@ using sqlcicd.Commands.Entity;
 using sqlcicd.Configuration;
 using sqlcicd.Configuration.Entity;
 using sqlcicd.Database;
+using sqlcicd.Database.Entity;
 using sqlcicd.Files;
 using sqlcicd.Repository;
 using sqlcicd.Repository.Entity;
@@ -23,6 +24,7 @@ namespace sqlcicd.DI
             services.AddTransient<ISqlConfigurationReader, WithRepoConfigurationReader>();
             services.AddTransient<ISysIgnoredFileProvider, WithRepoSysIgnoredFileProvider>();
             services.AddTransient<ISqlSelector, SqlSelector>();
+            services.AddTransient<IDbPrepare, DbPrepare>();
 
             // add configurations
             services.AddTransient<SqlIgnoreConfiguration>(provider =>

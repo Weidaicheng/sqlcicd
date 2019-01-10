@@ -24,6 +24,7 @@ namespace sqlcicd.DI
             services.AddTransient<ISqlConfigurationReader, WithRepoConfigurationReader>();
             services.AddTransient<ISysIgnoredFileProvider, WithRepoSysIgnoredFileProvider>();
             services.AddTransient<ISqlSelector, SqlSelector>();
+            services.AddTransient<IDbPrepare, DbPrepare>();
 
             // add configurations
             services.AddTransient<SqlIgnoreConfiguration>(provider =>
