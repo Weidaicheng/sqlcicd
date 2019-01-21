@@ -1,3 +1,4 @@
+using DependencyInjection.InConsole.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using sqlcicd.Commands;
 using sqlcicd.Commands.Entity;
@@ -11,10 +12,12 @@ namespace sqlcicd.DI
     /// </summary>
     public class HelpCommandInjector : ICommandInjector
     {
-        public void Inject(IServiceCollection services, Command command)
+        [Inject] public Command Command { get; set; }
+        
+        public void Inject(IServiceCollection services)
         {
             // sub help
-            switch (command.MainCommand)
+            switch (Command.MainCommand)
             {
                 case CommandEnum.HELP_CMD:
                 case CommandEnum.HELP_CMD_SHORT:
@@ -34,7 +37,7 @@ namespace sqlcicd.DI
                     break;
                 default:
                     throw new UnSupportedCommandException(
-                        $"Command {command.MainCommand} is not supported, please try again");
+                        $"Command {Command.MainCommand} is not supported, please try again");
             }
 
             // add command
