@@ -12,8 +12,6 @@ namespace sqlcicd.DI
         /// Inject
         /// </summary>
         /// <param name="services">services</param>
-        /// <param name="command"></param>
-        void Inject(IServiceCollection services,
-            Command command); // TODO: remove Command argument, after the property injection is supported.
+        void Inject(IServiceCollection services);
     }
 }
