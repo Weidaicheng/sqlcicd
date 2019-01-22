@@ -18,6 +18,7 @@ namespace sqlcicd.Configuration
     public class WithRepoConfigurationReader : ISqlConfigurationReader
     {
         #region Const
+
         /// <summary>
         /// Default sql order configuration file name
         /// </summary>
@@ -33,10 +34,6 @@ namespace sqlcicd.Configuration
         /// </summary>
         public const string BASE_CONFIG = ".sqlcicd";
 
-        /// <summary>
-        /// Connection string key in base configuration file
-        /// </summary>
-        public const string CONNECTION_STRING_KEY = "ConnectionString";
         #endregion
 
         private readonly IFileReader _fileReader;
@@ -76,7 +73,7 @@ namespace sqlcicd.Configuration
                     ignoredFiles.Add(line);
                 }
             }
-            
+
             return new SqlIgnoreConfiguration()
             {
                 IgnoredFile = ignoredFiles
@@ -126,32 +123,32 @@ namespace sqlcicd.Configuration
                 throw new FileNotFoundException($"{path} hasn't found.");
             }
 
-            var lines = await _fileReader.GetLinesAsync(path);
-            var dbTypeConfig = lines.FirstOrDefault(l => l.StartsWith(nameof(DbType)));
-            var repositoryTypeConfig = lines.FirstOrDefault(l => l.StartsWith(nameof(RepositoryType)));
-            var connectionString = lines.FirstOrDefault(l => l.StartsWith(CONNECTION_STRING_KEY));
+            try
+            {
+                var lines = await _fileReader.GetLinesAsync(path);
 
-            #region Not configured check
-            if(string.IsNullOrEmpty(dbTypeConfig))
-            {
-                throw new DbTypeNotConfiguredException("DbType is not configured.");
+                // TODO: refactoring
+                return new BaseConfiguration()
+                {
+                    DbType = (DbType) Enum.Parse(typeof(DbType),
+                        lines.FirstOrDefault(l => l.StartsWith(nameof(DbType))).Split(':')[1]),
+                    RepositoryType =
+                        (RepositoryType) Enum.Parse(typeof(RepositoryType),
+                            lines.FirstOrDefault(l => l.StartsWith(nameof(RepositoryType))).Split(':')[1]),
+                    Server = lines.FirstOrDefault(l => l.StartsWith(nameof(BaseConfiguration.Server))).Split(':')[1],
+                    Database =
+                        lines.FirstOrDefault(l => l.StartsWith(nameof(BaseConfiguration.Database))).Split(':')[1],
+                    UserId = lines.FirstOrDefault(l => l.StartsWith(nameof(BaseConfiguration.UserId))).Split(':')[1],
+                    Password =
+                        lines.FirstOrDefault(l => l.StartsWith(nameof(BaseConfiguration.Password))).Split(':')[1],
+                    BackupPath = lines.FirstOrDefault(l => l.StartsWith(nameof(BaseConfiguration.BackupPath)))
+                        ?.Split(':')[1]
+                };
             }
-            if(string.IsNullOrEmpty(repositoryTypeConfig))
+            catch
             {
-                throw new RepositoryTypeNotConfiguredException("Repository type is not configured.");
+                throw new BaseConfigurationInvalidException("Base configuration is invalid.");
             }
-            if(string.IsNullOrEmpty(connectionString))
-            {
-                throw new ConnectionStringNotProvidedException("Connection string is not configured.");
-            }
-            #endregion
-
-            return new BaseConfiguration()
-            {
-                DbType = (DbType)Enum.Parse(typeof(DbType), dbTypeConfig.Split(':')[1]),
-                RepositoryType = (RepositoryType)Enum.Parse(typeof(RepositoryType), repositoryTypeConfig.Split(':')[1]),
-                ConnectionString = connectionString.Split(':')[1]
-            };
         }
     }
 }

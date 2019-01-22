@@ -18,9 +18,29 @@ namespace sqlcicd.Configuration.Entity
         /// </summary>
         public DbType DbType { get; set; }
 
-        /// <summary>DbType
-        /// Database connection string
+        /// <summary>
+        /// Database server
         /// </summary>
-        public string ConnectionString { get; set; }
+        public string Server { get; set; }
+
+        /// <summary>
+        /// Database
+        /// </summary>
+        public string Database { get; set; }
+
+        /// <summary>
+        /// Database login id
+        /// </summary>
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// Database login password
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// Backup path, optional
+        /// </summary>
+        public string BackupPath { get; set; }
     }
 }

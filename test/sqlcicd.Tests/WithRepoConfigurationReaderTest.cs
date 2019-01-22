@@ -221,13 +221,12 @@ namespace sqlcicd.Tests
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
             var lines = new List<string>()
             {
-                $"{nameof(RepositoryType)}:Git",
-                $"{WithRepoConfigurationReader.CONNECTION_STRING_KEY}:default"
+                $"{nameof(RepositoryType)}:Git"
             };
             fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
             var confReader = new WithRepoConfigurationReader(fileReader, command);
 
-            Assert.Catch<DbTypeNotConfiguredException>(() =>
+            Assert.Catch<BaseConfigurationInvalidException>(() =>
             {
                 confReader.GetBaseConfiguration().GetAwaiter().GetResult();
             });
@@ -241,13 +240,12 @@ namespace sqlcicd.Tests
             fileReader.FileExistsCheck(Arg.Any<string>()).Returns(true);
             var lines = new List<string>()
             {
-                $"{nameof(DbType)}:Mssql",
-                $"{WithRepoConfigurationReader.CONNECTION_STRING_KEY}:default"
+                $"{nameof(DbType)}:Mssql"
             };
             fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
             var confReader = new WithRepoConfigurationReader(fileReader, command);
 
-            Assert.Catch<RepositoryTypeNotConfiguredException>(() =>
+            Assert.Catch<BaseConfigurationInvalidException>(() =>
             {
                 confReader.GetBaseConfiguration().GetAwaiter().GetResult();
             });
@@ -267,7 +265,7 @@ namespace sqlcicd.Tests
             fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
             var confReader = new WithRepoConfigurationReader(fileReader, command);
 
-            Assert.Catch<ConnectionStringNotProvidedException>(() =>
+            Assert.Catch<BaseConfigurationInvalidException>(() =>
             {
                 confReader.GetBaseConfiguration().GetAwaiter().GetResult();
             });
@@ -283,7 +281,10 @@ namespace sqlcicd.Tests
             {
                 $"{nameof(DbType)}:Mssql",
                 $"{nameof(RepositoryType)}:Git",
-                $"{WithRepoConfigurationReader.CONNECTION_STRING_KEY}:default"
+                $"{nameof(BaseConfiguration.Server)}:localhost",
+                $"{nameof(BaseConfiguration.Database)}:sqlcicd",
+                $"{nameof(BaseConfiguration.UserId)}:sa",
+                $"{nameof(BaseConfiguration.Password)}:123456"
             };
             fileReader.GetLinesAsync(Arg.Any<string>()).Returns(lines);
             var confReader = new WithRepoConfigurationReader(fileReader, command);
@@ -292,7 +293,10 @@ namespace sqlcicd.Tests
 
             Assert.AreEqual(DbType.Mssql, result.DbType);
             Assert.AreEqual(RepositoryType.Git, result.RepositoryType);
-            Assert.AreEqual("default", result.ConnectionString);
+            Assert.AreEqual("localhost", result.Server);
+            Assert.AreEqual("sqlcicd", result.Database);
+            Assert.AreEqual("sa", result.UserId);
+            Assert.AreEqual("123456", result.Password);
         }
     }
 }
