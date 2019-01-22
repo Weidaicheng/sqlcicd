@@ -59,7 +59,6 @@ namespace sqlcicd.DI
             {
                 case Database.Entity.DbType.Mssql:
                     services.AddTransient<IGrammarChecker, MssqlGrammarChecker>();
-                    services.AddTransient<IDbConnection>(provider => new SqlConnection(baseConfig.ConnectionString));
                     services.AddTransient<DbNegotiator, MssqlNegotiator>();
                     break;
                 // TODO: other cases

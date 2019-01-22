@@ -1,15 +1,20 @@
 using System.Data;
+using System.Data.SqlClient;
 using sqlcicd.Database.Entity;
 using Dapper;
 using System.Threading.Tasks;
+using sqlcicd.Configuration.Entity;
 
 namespace sqlcicd.Database
 {
     /// <inheritdoc />
     public class MssqlNegotiator : DbNegotiator
     {
-        public MssqlNegotiator(IDbConnection dbConnection)
-            : base(dbConnection)
+        public MssqlNegotiator(BaseConfiguration baseConfiguration)
+            : base(new SqlConnection($@"Server={baseConfiguration.Server};
+                                                    Database={baseConfiguration.Database};
+                                                    User Id={baseConfiguration.UserId};
+                                                    Password={baseConfiguration.Password};"))
         {
         }
 
@@ -20,7 +25,7 @@ namespace sqlcicd.Database
                 await DbConnection.QueryFirstOrDefaultAsync<string>($"SELECT object_id('{nameof(SqlVersion)}')");
             return !string.IsNullOrEmpty(tableExists);
         }
-        
+
 //        public async Task SetSqlVersionRollback(SqlVersion sv)
 //        {
 //            using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))

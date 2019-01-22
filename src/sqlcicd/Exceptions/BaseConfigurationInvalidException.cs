@@ -5,12 +5,12 @@ namespace sqlcicd.Exceptions
     /// <summary>
     /// Database connection string is not configured exception
     /// </summary>
-    public class ConnectionStringNotProvidedException : Exception
+    public class BaseConfigurationInvalidException : Exception
     {
         /// <summary>
         /// Database connection string is not configured exception
         /// </summary>
-        public ConnectionStringNotProvidedException(string message)
+        public BaseConfigurationInvalidException(string message)
             : base(message)
         { }
     }
