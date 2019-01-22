@@ -18,7 +18,7 @@ namespace sqlcicd.DI
     /// DI for continuous integrate 
     public class IntegrateCommandInjector : ICommandInjector
     {
-        public void Inject(IServiceCollection services, Command command)
+        public void Inject(IServiceCollection services)
         {
             services.AddTransient<IFileReader, FileReader>();
             services.AddTransient<ISqlConfigurationReader, WithRepoConfigurationReader>();

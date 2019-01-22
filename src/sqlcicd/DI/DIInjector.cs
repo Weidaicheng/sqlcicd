@@ -8,7 +8,7 @@ namespace sqlcicd.DI
     {
         public override void Inject(string[] t)
         {
-            //var command = Singletons.Command.ToString();
+//            var command = Singletons.Command.ToString();
             // inject Command
             var command = new CommandFactory().GenerateCommand(t);
 //            command.OriginalCommand = t.Length == 0 ? string.Empty : t.Aggregate((prev, next) => $"{prev} {next}");
@@ -16,7 +16,7 @@ namespace sqlcicd.DI
 
             CommandInjectorEnum
                 .GetInjector(command.ToString())
-                .Inject(services, command);
+                .Inject(services);
         }
     }
 }
