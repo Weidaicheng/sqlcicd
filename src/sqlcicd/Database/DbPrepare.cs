@@ -18,24 +18,29 @@ namespace sqlcicd.Database
         {
             using (var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                // save all records
-                var sqlVersions = await _dbNegotiator.GetAllSqlVersions();
-            
                 // check if table SqlVersion exists
                 if (await _dbNegotiator.IsVersionTableExists())
                 {
+                    // save all records
+                    var sqlVersions = await _dbNegotiator.GetAllSqlVersions();
+                
                     // drop table
                     await _dbNegotiator.DropVersionTable();
+                    // create table
+                    await _dbNegotiator.CreateVersionTable();
+            
+                    // restore all the rocords
+                    foreach (var sqlVersion in sqlVersions)
+                    {
+                        await _dbNegotiator.InsertSqlVersion(sqlVersion);
+                    }
                 }
-            
-                // create table
-                await _dbNegotiator.CreateVersionTable();
-            
-                // restore all the rocords
-                foreach (var sqlVersion in sqlVersions)
+                else
                 {
-                    await _dbNegotiator.InsertSqlVersion(sqlVersion);
+                    // create table
+                    await _dbNegotiator.CreateVersionTable();
                 }
+                
                 
                 trans.Complete();
             }
