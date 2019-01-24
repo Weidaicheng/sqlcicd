@@ -20,7 +20,7 @@ namespace sqlcicd
                 ICommandInvoker invoker = new CMDCommandInvoker(command);
                 var result = await invoker.Invoke();
 
-                return result.Success ? ProgramResult.Success : ProgramResult.Fail;
+                return ProgramResult.GetResult(result);
             }
             catch (Exception ex)
             {
